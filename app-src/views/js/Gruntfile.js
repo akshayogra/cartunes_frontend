@@ -3,10 +3,10 @@ module.exports = function (grunt) {
     { pkg             : grunt.file.readJSON('package.json')
     , browserify      :
       { tests         :
-        { src         : 'tests/browser-tests.coffee'
+        { src         : 'tests/tests.coffee'
         , dest        : 'browser/tests.js'
         , options     :
-          { transform : ['coffeeify']
+          { transform : ['coffeeify', 'jadeify']
           , alias     :
             [ 'common/page.coffee:page'
             ]

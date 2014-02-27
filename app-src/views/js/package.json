@@ -9,7 +9,12 @@
   "author": "Tim Smart <tim@thechurch.co.nz>",
   "license": "MIT",
   "dependencies": {
-    "angular": "^1.2.10"
+    "underscore": "^1.6.0",
+    "backbone": "^1.1.2",
+    "backbone.epoxy": "^1.2.0",
+    "jQuery": "^1.7.4",
+    "jade": "^1.2.0",
+    "jadeify": "^2.1.1"
   },
   "devDependencies": {
     "mocha": "^1.17.1",
