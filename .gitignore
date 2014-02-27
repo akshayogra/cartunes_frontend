@@ -62,4 +62,4 @@ Icon
 app/
 
 # Ignore config
-./config.json
+config.json
