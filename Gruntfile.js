@@ -36,7 +36,7 @@ module.exports = function (grunt) {
         , options     :
           { transform : ['coffeeify']
           , alias     :
-            [ './app-src/views/js/page.coffee:page'
+            [ './app-src/views/js/common/page.coffee:page'
             ]
           }
         }
