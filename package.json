@@ -26,6 +26,8 @@
     "mopidy": "^0.2.0",
     "express": "^3.4.8",
     "jade": "^1.2.0",
-    "redis": "^0.10.1"
+    "redis": "^0.10.1",
+    "grunt-nodemon": "^0.2.0",
+    "grunt-concurrent": "^0.4.3"
   }
 }
