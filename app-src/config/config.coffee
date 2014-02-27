@@ -8,3 +8,5 @@ module.exports = (app) ->
   app.set 'redis auth', config.redisAuth
 
   app.set 'mopidy ws', config.mopidyWebsocket
+
+  app.set 'javascript extension', config.javascriptExtension

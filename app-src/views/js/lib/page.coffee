@@ -2,7 +2,7 @@
 
 Emitter = require('events').EventEmitter
 
-page = new Emitter
+page = module.exports = new Emitter
 
 page.isReady = no
 
@@ -13,6 +13,6 @@ page.on 'newListener', (event, fn) ->
   if 'ready' == event && page.isReady
     setTimeout(
       ->
-        page.smit 'ready'
+        page.emit 'ready'
       0
     )

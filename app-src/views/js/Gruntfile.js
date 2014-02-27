@@ -8,7 +8,7 @@ module.exports = function (grunt) {
         , options     :
           { transform : ['coffeeify', 'jadeify']
           , alias     :
-            [ 'common/page.coffee:page'
+            [ 'lib/page.coffee:page'
             ]
           }
         }
@@ -36,5 +36,5 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', ['browserify:tests'])
 
-  grunt.registerTask('run-tests', ['connect:tests', 'watch:tests'])
+  grunt.registerTask('run-tests', ['default', 'connect:tests', 'watch:tests'])
 }

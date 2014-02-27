@@ -6,7 +6,7 @@ mpath   = require 'path'
 module.exports = (app) ->
   app.set(
     'views'
-    mpath.resolve mpath.join __dirname, '../views'
+    mpath.resolve mpath.join __dirname, '../../app-src/views'
   )
   app.set(
     'public'
