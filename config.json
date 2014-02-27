@@ -1,4 +1,4 @@
-{ "redisHost"      : "10.1.1.190"
-, "redisPort"      : 6379
-, "mopidWebsocket" : "ws://10.1.1.63:6680/mopidy/ws/"
+{ "redisHost"       : "10.1.1.190"
+, "redisPort"       : 6379
+, "mopidyWebsocket" : "ws://10.1.1.63:6680/mopidy/ws/"
 }

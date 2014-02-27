@@ -13,9 +13,12 @@ module.exports = (app, done) ->
 
   afterModels = (err) ->
     return done err if err
+    require('./config/mopidy.js')(app, afterMopidy)
 
+  afterMopidy = ->
     require('./config/routing.js')(app)
     require('./config/after.js')(app)
 
     done(null, app)
+
   require('./models')(app, afterModels)
