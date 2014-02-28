@@ -26,9 +26,6 @@ module.exports = (grunt) ->
         src         : 'app/public/js/dist.js'
         dest        : 'app/public/js/dist.min.js'
     watch           :
-      app           :
-        files       : ['app-src/**/*.coffee', '!app-src/views/**']
-        tasks       : ['coffee:app']
       views         :
         files       : ['app-src/views/**/*.coffee']
         tasks       : ['javascript']
