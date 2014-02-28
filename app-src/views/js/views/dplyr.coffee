@@ -1,5 +1,8 @@
 'use strict'
 
 bb = require 'backbone'
+require 'backbone.epoxy'
 
-class Dpylr extends bb.View
+class Dplyr extends bb.Epoxy.View
+
+module.exports = Dplyr

@@ -11,10 +11,10 @@
   "dependencies": {
     "underscore": "^1.6.0",
     "backbone": "^1.1.2",
-    "backbone.epoxy": "^1.2.0",
-    "jQuery": "^1.7.4",
+    "backbone.epoxy": "git://github.com/thechurch/backbone.epoxy.git",
     "jade": "^1.2.0",
-    "jadeify": "^2.1.1"
+    "jadeify": "^2.1.1",
+    "jquery": "^2.1.0"
   },
   "devDependencies": {
     "mocha": "^1.17.1",

@@ -1,3 +1,4 @@
+'use strict'
 
 #
 # A settings registry for pulling an app together
