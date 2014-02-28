@@ -3,7 +3,7 @@ module.exports = (grunt) ->
     pkg             : grunt.file.readJSON('package.json')
     browserify      :
       tests         :
-        src         : 'tests/tests.coffee'
+        src         : ['tests/**/*-test.coffee']
         dest        : 'browser/tests.js'
         options     :
           transform : ['coffeeify', 'jadeify']
