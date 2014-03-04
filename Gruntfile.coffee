@@ -26,17 +26,32 @@ module.exports = (grunt) ->
       default       :
         src         : 'app/public/js/dist.js'
         dest        : 'app/public/js/dist.min.js'
+    stylus          :
+      dev           :
+        files       : { 'app/public/css/screen.css' : 'app-src/views/styl/screen.styl' }
+        options     :
+          compress  : no
+          use       : [require('nib')]
+      prod          :
+        files       : { 'app/public/css/screen.min.css' : 'app-src/views/styl/screen.styl' }
+        options     :
+          compress  : yes
+          use       : [require('nib')]
     watch           :
       views         :
         files       : ['app-src/views/**/*.coffee']
         tasks       : ['javascript']
+      stylus        :
+        files       : ['app-src/views/style/**/*.styl']
+        tasks       : ['stylus']
 
   grunt.loadNpmTasks 'grunt-concurrent'
   grunt.loadNpmTasks 'grunt-nodemon'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-browserify'
+  grunt.loadNpmTasks 'grunt-contrib-stylus'
 
   grunt.registerTask 'javascript', ['browserify', 'uglify']
   grunt.registerTask 'start-dev-server', ['default', 'concurrent:dev']
-  grunt.registerTask 'default', ['javascript']
+  grunt.registerTask 'default', ['javascript', 'stylus']
