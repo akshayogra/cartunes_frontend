@@ -14,7 +14,10 @@
     "backbone.epoxy": "git://github.com/thechurch/backbone.epoxy.git",
     "jade": "^1.2.0",
     "jadeify": "^2.1.1",
-    "jquery": "^2.1.0"
+    "jquery": "^2.1.0",
+    "shoe": "0.0.15",
+    "reconnect-core": "0.0.1",
+    "dnode": "^1.2.0"
   },
   "devDependencies": {
     "mocha": "^1.17.1",

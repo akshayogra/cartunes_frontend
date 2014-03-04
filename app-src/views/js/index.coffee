@@ -4,10 +4,16 @@
 bb   = require 'backbone'
 bb.$ = require 'jquery'
 
-page = require 'page'
-app  = new (require './lib/app.coffee')
+# Setup page and app
+page  = require 'page'
+Dplyr = require './views/dplyr.coffee'
+app   = new (require './lib/app.coffee')
+
+# TODO : Remove
 window.app = app
 
-Dplyr = require './views/dplyr.coffee'
+page.once 'ready', ->
+  require('./config/dnode.coffee')(app, gotStream)
 
-app.set 'dplyr', new Dplyr
+gotStream = ->
+  app.set 'dplyr', new Dplyr

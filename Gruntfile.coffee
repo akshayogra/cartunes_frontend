@@ -4,14 +4,15 @@ module.exports = (grunt) ->
     concurrent      :
       dev           :
         tasks       : ['watch', 'nodemon']
-        options     : { logConcurrentOutput : true }
+        options     : logConcurrentOutput : true
     nodemon         :
       dev           :
         script      : 'server.js'
         options     :
+          cwd       : __dirname
           ext       : 'js'
           watch     : ['app']
-          ignore    : ['app/public']
+          ignore    : ['app/public', 'app/views']
           delay     : 3
     browserify      :
       default       :
