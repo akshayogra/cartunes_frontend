@@ -42,7 +42,7 @@ module.exports = (grunt) ->
         files       : ['app-src/views/**/*.coffee']
         tasks       : ['javascript']
       stylus        :
-        files       : ['app-src/views/style/**/*.styl']
+        files       : ['app-src/views/styl/**/*.styl']
         tasks       : ['stylus']
 
   grunt.loadNpmTasks 'grunt-concurrent'

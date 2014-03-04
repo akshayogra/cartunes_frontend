@@ -1,4 +1,24 @@
 extends ../layout
 
 block content
-  h1 Hello world
+  div.search-wrap
+    h1.logo
+    form
+      input.input.input-search(placeholder="Search")
+      button.button.button-search
+        span.icon.icon-magnifier
+
+  ul.list-reset.panel-labels
+    li.panel-label-results
+      span.icon.icon-music-tone-alt
+      |  Results
+    li.panel-label-queue
+      span.icon.icon-list
+      |  Queue
+
+  div.panel.panel-results
+    ul.tracklist
+
+  div.panel.panel-queue
+
+  div.controls-wrap

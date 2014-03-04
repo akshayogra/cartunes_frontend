@@ -39,7 +39,7 @@ grid-line-em(lines, context = grid-em)
   grid-font-em(lines * grid-line, context)
 
 grid-font-size(size, context = grid-em)
-  font-size (size / context) * 1em
+  font-size grid-font-em(size, context)
 
 grid-line-height(lines, context = grid-em)
   line-height ((lines * grid-line) / context) * 1em
