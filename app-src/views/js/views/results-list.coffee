@@ -19,15 +19,10 @@ class ResultsList extends Tracklist
     'click .button-add' : 'clickedAdd'
 
   render: ->
-    if @tracklist
-      @tracklist.off()
-
     @$el.html(@template tracklist : @collection)
 
     @tracklist = @$el.find '.tracklist'
     @tracklist.on 'scroll', => @scroll()
-
-    @delegateEvents()
     this
 
   scroll: ->
@@ -39,7 +34,8 @@ class ResultsList extends Tracklist
     @scrollTimeout = setTimeout onTimeout, 500
     this
 
-  clickedAdd: ->
+  clickedAdd: (event) ->
     # TODO : Work out what model was clicked etc
+    @$(event.currentTarget).prop 'disabled', true
 
 module.exports = ResultsList
