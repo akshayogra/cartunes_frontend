@@ -6,8 +6,27 @@
     border-bottom: 1px solid dw-light-grey
     display: block
     height: grid-line-em(2)
+    position: relative
     text-overflow: ellipsis
     width: 100%
+
+    .button-add
+      box-sizing: border-box
+      border-left: 1px solid dw-light-grey
+      height: grid-line-em(2)
+      line-height: grid-line-em(2)
+      position: absolute
+      right: 0
+      top: 0
+      width: grid-line-em(2)
+
+.track-cover
+  display: block
+  height: grid-line-em(2)
+  left: 0
+  position: absolute
+  top: 0
+  width: grid-line-em(2)
 
 .track-name
 .track-artist
@@ -20,10 +39,10 @@
 
 .track-name
   height: grid-line-em(1)
-  grid-line-padding(0 3)
+  grid-line-padding(0 2.25)
 
 .track-artist
   small()
   color: dw-dark-grey
   height: grid-line-em(1, small-size)
-  grid-line-padding(0 3, small-size)
+  grid-line-padding(0 2.25, small-size)

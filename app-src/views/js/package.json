@@ -15,7 +15,8 @@
     "jquery": "^2.1.0",
     "shoe": "0.0.15",
     "reconnect-core": "0.0.1",
-    "dnode": "^1.2.0"
+    "dnode": "^1.2.0",
+    "lastfm": "git://github.com/meantimeit/browserified-lastfm-api.git"
   },
   "devDependencies": {
     "mocha": "^1.17.1",
