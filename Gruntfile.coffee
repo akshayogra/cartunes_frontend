@@ -19,7 +19,7 @@ module.exports = (grunt) ->
         src         : 'app-src/views/js/index.coffee'
         dest        : 'app/public/js/dist.js'
         options     :
-          transform : ['coffeeify']
+          transform : ['coffeeify', 'jadeify']
           alias     : ['./app-src/views/js/lib/page.coffee:page']
           debug     : true
     uglify          :
@@ -39,7 +39,7 @@ module.exports = (grunt) ->
           use       : [require('nib')]
     watch           :
       views         :
-        files       : ['app-src/views/**/*.coffee']
+        files       : ['app-src/views/js/**/*.coffee', 'app-src/views/js/**/*.jade']
         tasks       : ['javascript']
       stylus        :
         files       : ['app-src/views/styl/**/*.styl']

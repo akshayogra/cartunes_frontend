@@ -35,6 +35,7 @@
     "shoe": "0.0.15",
     "dnode": "^1.2.0",
     "nib": "^1.0.2",
-    "grunt-contrib-stylus": "^0.13.2"
+    "grunt-contrib-stylus": "^0.13.2",
+    "jadeify": "^2.1.1"
   }
 }

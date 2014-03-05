@@ -22,4 +22,5 @@ module.exports = (app, done) ->
 
     done(null, app)
 
-  require('./models')(app, afterModels)
+  # require('./models')(app, afterModels)
+  afterModels()

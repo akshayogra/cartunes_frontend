@@ -1,0 +1,6 @@
+ul.list-reset.tracklist.tracklist-results
+  each track, i in tracklist.models
+    li
+      span.track-name= track.get('name')
+      // span.track-album= track.get('album').name
+      span.track-artist= track.get('album').artists[0].name

@@ -1,3 +1,29 @@
-.list-tracklist
+.tracklist
+  height: 100%
+  overflow-y: scroll
+
   li
     border-bottom: 1px solid dw-light-grey
+    display: block
+    height: grid-line-em(2)
+    text-overflow: ellipsis
+    width: 100%
+
+.track-name
+.track-artist
+  box-sizing: border-box
+  display: block
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+  width: 100%
+
+.track-name
+  height: grid-line-em(1)
+  grid-line-padding(0 3)
+
+.track-artist
+  small()
+  color: dw-dark-grey
+  height: grid-line-em(1, small-size)
+  grid-line-padding(0 3, small-size)

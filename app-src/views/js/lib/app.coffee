@@ -1,11 +1,13 @@
 'use strict'
 
+Emitter = require('events').EventEmitter
+
 #
 # A settings registry for pulling an app together
 #
 # @constructor
 #
-class App
+class App extends Emitter
   settings: {}
 
   #
