@@ -4,12 +4,21 @@ bb = require 'backbone'
 require 'backbone.epoxy'
 
 class Track extends bb.Model
+  @COVER_CACHE = {}
+
   idAttribute: 'uri'
 
   cleanup: ->
     @off()
 
-  albumCover: (done) ->
+  getCover: (done) ->
+    artist = @get('artists')[0]?.name || ''
+    album  = @get('album').name
+    key    = "#{album}:#{artist}"
+
+    if Track.COVER_CACHE[key]
+      return done null, Track.COVER_CACHE[key]
+
     lastfm = bb.app.set 'lastfm'
 
     lastfm.album.getInfo
@@ -17,7 +26,9 @@ class Track extends bb.Model
       album  : @get('album').name
     , success : (data) ->
         for image in data.album.image
-          return done null, image['#text'] if 'medium' == image.size
+          if 'medium' == image.size
+            Track.COVER_CACHE[key] = image['#text']
+            return done null, image['#text']
         done()
       error   : (code, message) ->
         error = new Error message

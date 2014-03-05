@@ -21,6 +21,7 @@ page.once 'ready', ->
 gotStream = ->
   # Setup other config
   require('./config/lastfm.coffee')(app)
+  require('./config/queues.coffee')(app)
 
   app.set 'dplyr', new Dplyr
   app.set 'router', new Router
