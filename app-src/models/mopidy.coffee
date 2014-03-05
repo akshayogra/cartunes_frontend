@@ -2,8 +2,7 @@
 
 class Mopidy
   constructor: (data) ->
-    @data = {}
-    @id   = @data.id = data.uri
+    @data = data
 
   toJSON: -> @data
 

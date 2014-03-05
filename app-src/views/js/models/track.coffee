@@ -4,6 +4,8 @@ bb = require 'backbone'
 require 'backbone.epoxy'
 
 class Track extends bb.Model
+  idAttribute: 'uri'
+
   cleanup: ->
     @off()
 
@@ -11,7 +13,7 @@ class Track extends bb.Model
     lastfm = bb.app.set 'lastfm'
 
     lastfm.album.getInfo
-      artist : @get('album').artists[0].name
+      artist : @get('artists')[0]?.name || ''
       album  : @get('album').name
     , success : (data) ->
         for image in data.album.image
