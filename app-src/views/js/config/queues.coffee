@@ -9,4 +9,4 @@ onCoverQueue = (job, done) ->
   job.track.getCover gotCover
 
 module.exports = (app) ->
-  app.set 'cover queue', async.queue onCoverQueue, 5
+  app.set 'cover queue', async.queue onCoverQueue, 10
