@@ -34,38 +34,14 @@ class ResultsList extends Tracklist
 
     this
 
-  scroll: (immediate = false) ->
-    clearTimeout @scrollTimeout if @scrollTimeout
-
-    onTimeout = =>
-      @scrollTimeout = null
-
-      height    = @tracklist.height()
-      inView    = Math.ceil(height / @trackHeight) + 1
-
-      scrollTop = @tracklist.scrollTop()
-      gonePast  = Math.floor scrollTop / @trackHeight
-
-      @trigger 'scroll', gonePast, inView
-
-    if immediate
-      onTimeout()
-    else
-      @scrollTimeout = setTimeout onTimeout, 500
-    this
-
   clickedAdd: (event) ->
-    # TODO : Work out what model was clicked etc
-    @$(event.currentTarget).prop 'disabled', true
-    this
+    button = @$(event.currentTarget)
+    track  = button.parent()
+    index  = @tracklist.index track
 
-  setTrackCover: (index, cover) ->
-    @coversLoaded[index] = true
-    return unless cover
+    button.prop 'disabled', true
 
-    track = @tracklist.find('li').eq(index)
-    return unless track
-    track.find('.track-cover').attr 'src', cover
+    @trigger 'click:add', index
 
     this
 
