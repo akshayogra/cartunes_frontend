@@ -10,7 +10,10 @@ class Album extends Mopidy
     @data.name = data.name
     @data.date = data.date
 
-    @data.artists = for artist in data.artists
-      new Artist artist
+    @data.artists = []
+
+    if data.artists
+      for artist in data.artists
+        @data.artists.push new Artist artist
 
 module.exports = Album
