@@ -95,7 +95,7 @@ class RedisAdapter
   #
   # @param Function done
   #
-  getQueue: (done) ->
+  getQueue: (length, done) ->
     # err, tracks
     #
     # prefix:queue
