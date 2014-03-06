@@ -9,6 +9,7 @@ class ResultsList extends Tracklist
 
     @scrollTimeout = null
     @tracklist     = null
+    @tracks        = null
     @trackHeight   = null
     @coversLoaded  = []
 
@@ -27,8 +28,9 @@ class ResultsList extends Tracklist
     @$el.html(@template tracklist : @collection)
 
     @tracklist = @$el.find '.tracklist'
+    @tracks    = @tracklist.find 'li'
 
-    @trackHeight = @tracklist.find('li').eq(0).outerHeight()
+    @trackHeight = @tracks.eq(0).outerHeight()
     @tracklist.on 'scroll', => @scroll()
     @scroll()
 
@@ -37,7 +39,7 @@ class ResultsList extends Tracklist
   clickedAdd: (event) ->
     button = @$(event.currentTarget)
     track  = button.parent()
-    index  = @tracklist.index track
+    index  = @tracks.index track
 
     button.prop 'disabled', true
 

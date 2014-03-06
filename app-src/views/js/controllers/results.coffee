@@ -20,6 +20,9 @@ class ResultsController extends AppController
     @results.list.on 'scroll', (start, count) =>
       @queueCovers start, count
 
+    @results.list.on 'click:add', (index) =>
+      @queueTrack @results.list.collection.at index
+
   gotResults: (data) ->
     @results.list.collection.reset data
     this
@@ -51,6 +54,10 @@ class ResultsController extends AppController
         @results.list.setTrackCover index, cover
         @results.list.collection.off 'reset', onReset
 
+    this
+
+  queueTrack: (track) ->
+    @dnode().queue.add track.toJSON()
     this
 
 module.exports = ResultsController

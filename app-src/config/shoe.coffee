@@ -8,7 +8,8 @@ module.exports = (app) ->
   app.set 'dnode clients', dnodeClients
 
   shoe.on 'connection', (stream) ->
-    d = dnode api
+    d        = dnode api
+    d.stream = stream
 
     dnodeClients.push(d)
     d.on 'end', ->
