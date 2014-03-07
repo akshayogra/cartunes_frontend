@@ -16,8 +16,8 @@ module.exports = (app, done) ->
     require('./config/mopidy.js')(app, afterMopidy)
 
   afterMopidy = ->
-    require('./config/routing.js')(app)
     require('./config/shoe.js')(app)
+    require('./config/routing.js')(app)
     require('./config/after.js')(app)
 
     done(null, app)

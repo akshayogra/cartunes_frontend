@@ -37,4 +37,9 @@ class Track extends bb.Model
 
     this
 
+  clientVoted: (clientId) ->
+    votesHash = @get('votesHash')
+    return false unless votesHash
+    return votesHash[clientId]
+
 module.exports = Track

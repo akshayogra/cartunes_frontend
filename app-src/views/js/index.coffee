@@ -19,6 +19,14 @@ page.once 'ready', ->
   require('./config/dnode.coffee')(app, gotStream)
 
 gotStream = ->
+  # Get client id
+  app.set('dnode').clients.getId gotClientId
+
+gotClientId = (err, clientId) ->
+  throw err if err
+
+  app.set 'client id', clientId
+
   # Setup other config
   require('./config/lastfm.coffee')(app)
   require('./config/queues.coffee')(app)

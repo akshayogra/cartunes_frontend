@@ -1,14 +1,36 @@
 'use strict'
 
-AppController = require './app.coffee'
+ListController = require './list.coffee'
 
-class QueueController extends AppController
+class QueueController extends ListController
   constructor: (app) ->
     super app, 'queue'
 
-    @queue = @dplyr.queue
+    @view = @dplyr.queue
 
     @router.on 'route:queue', =>
-      @queue.focus()
+      @view.focus()
+
+    @app.on 'queue:trackChanged', (track) =>
+      @trackChanged track
+
+    @refresh ->
+
+    @init()
+
+  refresh: (done) ->
+    gotQueue = (err, tracks) =>
+      return done err if err
+
+      @view.list.collection.reset tracks
+      done()
+
+    @dnode().queue.get gotQueue
+
+    this
+
+  trackChanged: (track) ->
+    @view.list.collection.add track, merge : true
+    this
 
 module.exports = QueueController

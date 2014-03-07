@@ -11,7 +11,6 @@ class ResultsList extends Tracklist
     @tracklist     = null
     @tracks        = null
     @trackHeight   = null
-    @coversLoaded  = []
 
     @collection.on 'reset', =>
       @render()
@@ -21,20 +20,6 @@ class ResultsList extends Tracklist
 
   events:
     'click .button-add' : 'clickedAdd'
-
-  render: ->
-    @coversLoaded = []
-
-    @$el.html(@template tracklist : @collection)
-
-    @tracklist = @$el.find '.tracklist'
-    @tracks    = @tracklist.find 'li'
-
-    @trackHeight = @tracks.eq(0).outerHeight()
-    @tracklist.on 'scroll', => @scroll()
-    @scroll()
-
-    this
 
   clickedAdd: (event) ->
     button = @$(event.currentTarget)

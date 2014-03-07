@@ -11,3 +11,5 @@ module.exports = (app) ->
   app.set 'mopidy ws', config.mopidyWebsocket
 
   app.set 'javascript extension', config.javascriptExtension
+
+  app.set 'queue max', config.maxQueueSize

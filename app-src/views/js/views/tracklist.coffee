@@ -8,10 +8,27 @@ class Tracklist extends bb.View
   constructor: ->
     super arguments...
 
-    @tracklist = null
+    @tracklist    = null
+    @coversLoaded = null
 
     unless @collection
       @collection = new TracklistCollection
+
+  render: ->
+    @$el.html(@template tracklist : @collection)
+
+    @tracklist = @$el.find '.tracklist'
+    @tracks    = @tracklist.find 'li'
+
+    @tracks.each (i, track) =>
+      model = @collection.at i
+      model.$el = @$ track
+
+    @trackHeight = @tracks.eq(0).outerHeight()
+    @tracklist.on 'scroll', => @scroll()
+    @scroll()
+
+    this
 
   scroll: (immediate = false) ->
     clearTimeout @scrollTimeout if @scrollTimeout
@@ -33,14 +50,9 @@ class Tracklist extends bb.View
       @scrollTimeout = setTimeout onTimeout, 500
     this
 
-  setTrackCover: (index, cover) ->
-    @coversLoaded[index] = true
-    return unless cover
-
-    track = @tracklist.find('li').eq(index)
-    return unless track
-    track.find('.track-cover').attr 'src', cover
-
+  setTrackCover: (track) ->
+    return unless track.cover
+    track.$el.find('.track-cover').attr 'src', track.cover
     this
 
 module.exports = Tracklist
