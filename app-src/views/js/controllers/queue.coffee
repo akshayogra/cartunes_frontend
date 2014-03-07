@@ -14,6 +14,9 @@ class QueueController extends ListController
     @app.on 'queue:trackChanged', (track) =>
       @trackChanged track
 
+    @app.on 'queue:trackRemoved', (track) =>
+      @trackRemoved track
+
     @view.list.on 'click:up', (index) =>
       track = @view.list.collection.at index
       @dnode().queue.add track.toJSON()
@@ -39,6 +42,10 @@ class QueueController extends ListController
 
   trackChanged: (track) ->
     @view.list.collection.add track, merge : true
+    this
+
+  trackRemoved: (track) ->
+    @view.list.collection.remove track
     this
 
 module.exports = QueueController

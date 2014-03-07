@@ -97,6 +97,9 @@ class RedisAdapter
   resetTrack: (track, done) ->
     gotVotes = (err, votes) =>
       return done err if err
+      return done() unless votes && votes[0]
+
+      votes = votes[0]
 
       @redis
         .multi()
@@ -107,7 +110,7 @@ class RedisAdapter
 
     onExec = (err) -> done err
 
-    @getTrackVotes track, gotVotes
+    @getVotes [track], gotVotes
 
     this
 

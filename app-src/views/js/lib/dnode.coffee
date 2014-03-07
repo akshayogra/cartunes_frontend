@@ -6,6 +6,9 @@ module.exports = (app) ->
       trackChanged : (track) ->
         app.emit 'queue:trackChanged', track
 
+      trackRemoved : (track) ->
+        app.emit 'queue:trackRemoved', track
+
       refresh      : (tracks) ->
         app.emit 'queue:refresh', tracks
   }

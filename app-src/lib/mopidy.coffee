@@ -1,5 +1,11 @@
 'use strict'
 
+exports.cleanTrack = (track) ->
+  delete track.voted
+  delete track.votes
+  delete track.votesHash
+  delete track.updated
+
 exports.search = (m, query, done) ->
   promise = m.library.search any : query
 
