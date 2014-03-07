@@ -15,7 +15,13 @@ class Tracklist extends bb.View
       @collection = new TracklistCollection
 
   render: ->
-    @$el.html(@template tracklist : @collection)
+    @$el.html(
+      @template
+        tracklist : @collection
+        app       : bb.app
+        queue     : bb.app.set('dplyr').queue.list.collection
+        clientId  : bb.app.set('client id')
+    )
 
     @tracklist = @$el.find '.tracklist'
     @tracks    = @tracklist.find 'li'

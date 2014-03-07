@@ -14,6 +14,14 @@ class QueueController extends ListController
     @app.on 'queue:trackChanged', (track) =>
       @trackChanged track
 
+    @view.list.on 'click:up', (index) =>
+      track = @view.list.collection.at index
+      @dnode().queue.add track.toJSON()
+
+    @view.list.on 'click:down', (index) =>
+      track = @view.list.collection.at index
+      @dnode().queue.downvote track.toJSON()
+
     @refresh ->
 
     @init()

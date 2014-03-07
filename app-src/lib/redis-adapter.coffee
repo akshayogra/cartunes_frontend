@@ -51,7 +51,7 @@ class RedisAdapter
 
     this
 
-  downvoteTrack: (track, done) ->
+  downvoteTrack: (track, clientId, done) ->
     onExec = (err) -> done err
 
     track.updated = Date.now()
@@ -60,7 +60,7 @@ class RedisAdapter
       .hset @key('tracks'), track.uri, JSON.stringify track
       .hset @key('votes', track.uri), clientId, -1
       .zrem @key('pool'), track.uri
-      .sadd @key('voted') track.uri
+      .sadd @key('voted'), track.uri
       .exec onExec
 
     this

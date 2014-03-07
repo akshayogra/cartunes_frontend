@@ -10,15 +10,31 @@
     text-overflow: ellipsis
     width: 100%
 
-    .button-add
-      box-sizing: border-box
-      border-left: 1px solid dw-light-grey
-      height: grid-line-em(2)
-      line-height: grid-line-em(2)
-      position: absolute
-      right: 0
-      top: 0
-      width: grid-line-em(2)
+
+.tracklist-buttons
+  height: grid-line-em(2)
+  line-height: grid-line-em(2)
+  overflow: hidden
+  position: absolute
+  right: 0
+  top: 0
+
+  button
+    box-sizing: border-box
+    border-left: 1px solid dw-light-grey
+    display: block
+    float: left
+    height: grid-line-em(2)
+    line-height: grid-line-em(2)
+    width: grid-line-em(2)
+
+.tracklist-votes
+  border-left: 1px solid dw-light-grey
+  box-sizing: border-box
+  display: block
+  float: left
+  text-align: center
+  width: grid-line-em(1)
 
 .track-cover
   display: block

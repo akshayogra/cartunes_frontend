@@ -23,7 +23,7 @@ class ResultsList extends Tracklist
 
   clickedAdd: (event) ->
     button = @$(event.currentTarget)
-    track  = button.parent()
+    track  = button.parent().parent()
     index  = @tracks.index track
 
     button.prop 'disabled', true
