@@ -1,8 +1,52 @@
 .controls-wrap
-  background-color: black
   bottom: 0
-  height: grid-line-em(2)
   overflow: hidden
   position: absolute
   width: 100%
   z-index: 1
+
+.progress
+  background-color: white
+  height: grid-line-em(0.25)
+
+.progress-bar
+  background-color: dw-yellow
+  display: block
+  height: 100%
+  width: 50%
+
+.current-track
+  background-color: black
+  color: white
+  height: grid-line-em(2)
+  overflow: hidden
+
+  .current-track-label
+  .track-info
+    float: left
+
+  .current-buttons
+    float: right
+
+.current-track-label
+  display: block
+  height: 100%
+  line-height: grid-line-em(2)
+  grid-line-padding(0 1)
+
+.track-info
+  .track-name
+  .track-artist
+    padding: 0
+
+.current-buttons
+  float: right
+  height: 100%
+  line-height: grid-line-em(2)
+  grid-line-padding(0 1)
+
+  .track-votes
+    grid-line-padding(0 0.5)
+
+  .button
+    color: white
