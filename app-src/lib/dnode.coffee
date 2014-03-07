@@ -22,21 +22,28 @@ module.exports = (app) ->
     addr = addr.digest 'hex'
 
     return {
-      db       :
-        search : (query, done) ->
+      db         :
+        search   : (query, done) ->
           helpers.search mopidy, query, done
 
-      queue    :
-        add    : (track) ->
+      queue      :
+        add      : (track) ->
           app.emit 'queue:add', track, addr
 
         downvote : (track) ->
           app.emit 'queue:downvote', track, addr
 
-        get    : (done) ->
+        get      : (done) ->
           db.getQueue app.set('queue max'), done
 
-      clients  :
-        getId  : (done) ->
+      current    :
+        vote     : (track) ->
+          app.emit 'current:vote', track, addr
+
+        downvote : (track) ->
+          app.emit 'current:downvote', track, addr
+
+      clients    :
+        getId    : (done) ->
           done null, addr
     }

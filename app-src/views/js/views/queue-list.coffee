@@ -64,7 +64,7 @@ class QueueList extends Tracklist
       $prev.after $el
 
     @tracks = @tracklist.find 'li'
-    @scroll()
+    @scroll yes
 
     this
 
@@ -73,6 +73,8 @@ class QueueList extends Tracklist
 
     @tracks.eq(index).remove()
     @tracks = @tracklist.find 'li'
+
+    @scroll yes
 
     this
 

@@ -9,6 +9,7 @@ class ResultsController extends ListController
     @view = @dplyr.results
 
     @router.on 'route:queue', =>
+      return unless @view.list.collection.length
       @view.list.collection.reset []
 
     @router.on 'route:search', (query) =>

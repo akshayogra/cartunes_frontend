@@ -5,13 +5,13 @@ helpers = require '../lib/mopidy.js'
 
 class MopidyController extends Emitter
   constructor: (app) ->
-    @app     = app
-    @mopidy  = app.set 'mopidy'
-    @clients = app.set 'dnode clients'
-    @db      = app.set 'db'
-    @playing = no
-    @votes   = 0
-    @top     = null
+    @app       = app
+    @mopidy    = app.set 'mopidy'
+    @clients   = app.set 'dnode clients'
+    @db        = app.set 'db'
+    @votes     = 0
+    @votesHash = null
+    @top       = null
 
     @setupListeners()
     @checkPlaying()
@@ -20,18 +20,17 @@ class MopidyController extends Emitter
     @app.on 'queue:add', (track, addr) => @queueAdd track, addr
     @app.on 'queue:downvote', (track, addr) => @queueDownvote track, addr
 
-    @mopidy.on 'event:trackPlaybackStarted', (track) => @trackChange track.tl_track.track
+    @app.on 'current:vote', (track, clientId)     => @votePlaying track, addr, 1
+    @app.on 'current:downvote', (track, clientId) => @votePlaying track, addr, -1
 
-    @mopidy.on 'event:playbackStateChanged', (state) =>
-      unless 'playing' == state.new_state
-        @playing = no
-      else
-        @playing = yes
+    @mopidy.on 'event:trackPlaybackStarted', (track) => @trackChange track.tl_track.track
 
     this
 
   checkPlaying: ->
-    return this if @playing
+    gotState = (state) =>
+      return if state == 'playing'
+      @db.getQueue @app.set('queue max'), gotQueue
 
     gotQueue = (err, tracks) =>
       throw err if err
@@ -47,10 +46,10 @@ class MopidyController extends Emitter
       @mopidy.playback.play(null)
         .then playing, (err) -> throw err
 
-    playing = =>
-      @playing = yes
+    playing = ->
 
-    @db.getQueue @app.set('queue max'), gotQueue
+    @mopidy.playback.getState()
+      .then gotState, (err) -> throw err
 
     this
 
@@ -164,6 +163,15 @@ class MopidyController extends Emitter
 
       track = tracks[0]
 
+      @db.getVotes [track], gotVotes
+
+    gotVotes = (err) =>
+      throw err if err
+
+      # Save current vote state
+      @votes     = track.votes
+      @votesHash = track.votesHash
+
       @db.resetTrack track, trackReset
 
     trackReset = (err) =>
@@ -176,7 +184,30 @@ class MopidyController extends Emitter
     this
 
   setPlaying: (track) ->
-    console.error 'SETPLAYING', track
+    track.votes     = @votes
+    track.votesHash = @votesHash
+
+    for client in @clients
+      client.current?.set? track
+
+    this
+
+  votePlaying: (track, clientId, amount) ->
+    @votesHash[clientId] = amount
+
+    votes = 0
+    for client, value of @votesHash
+      votes += value
+    @votes = votes
+
+    setVotes = (err) =>
+      throw err if err
+
+      # Update playing track
+      @setPlaying track
+
+    @db.setPooledVotes track, votes, setVotes
+
     this
 
 module.exports = MopidyController

@@ -124,6 +124,15 @@ class RedisAdapter
 
     this
 
+  setPooledVotes: (track, votes, done) ->
+    @redis
+      .multi()
+      .hset @key('previous'), track.uri, votes
+      .zadd @key('pool'), track.uri, votes
+      .exec (err) -> done err
+
+    this
+
   removeTrack: (track, done) ->
     onExec = (err) -> done err
 

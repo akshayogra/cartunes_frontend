@@ -11,5 +11,9 @@ module.exports = (app) ->
 
       refresh      : (tracks) ->
         app.emit 'queue:refresh', tracks
+
+    current        :
+      set          : (track) ->
+        app.emit 'current:set', track
   }
 

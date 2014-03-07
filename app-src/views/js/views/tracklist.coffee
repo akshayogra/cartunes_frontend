@@ -15,6 +15,8 @@ class Tracklist extends bb.View
       @collection = new TracklistCollection
 
   render: ->
+    @tracklist.off() if @tracklist
+
     @$el.html(
       @template
         tracklist : @collection
@@ -32,9 +34,9 @@ class Tracklist extends bb.View
 
     @trackHeight = @tracks.eq(0).outerHeight()
     @tracklist.on 'scroll', => @scroll()
-    @scroll()
 
     @trigger 'render'
+    @scroll yes
 
     this
 

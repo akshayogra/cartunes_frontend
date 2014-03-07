@@ -1,5 +1,6 @@
 'use strict'
 
+bb                  = require 'backbone'
 Tracklist           = require './tracklist.coffee'
 TracklistCollection = require '../models/tracklist.coffee'
 
@@ -35,7 +36,7 @@ class ResultsList extends Tracklist
 
     queue.forEach (qTrack, i) =>
       track = @collection.get qTrack.get('uri')
-      return unless track
+      return unless track and qTrack.clientVoted bb.app.set 'client id'
 
       index = @collection.indexOf track
       @tracks.eq(index).find('.button-add').prop 'disabled', yes

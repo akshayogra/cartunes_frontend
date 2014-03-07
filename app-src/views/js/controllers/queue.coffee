@@ -17,6 +17,9 @@ class QueueController extends ListController
     @app.on 'queue:trackRemoved', (track) =>
       @trackRemoved track
 
+    @app.on 'queue:refresh', (tracks) =>
+      @view.list.collection.set tracks
+
     @view.list.on 'click:up', (index) =>
       track = @view.list.collection.at index
       @dnode().queue.add track.toJSON()
@@ -32,6 +35,7 @@ class QueueController extends ListController
   refresh: (done) ->
     gotQueue = (err, tracks) =>
       return done err if err
+      return unless tracks && tracks.length
 
       @view.list.collection.reset tracks
       done()
