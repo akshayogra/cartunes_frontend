@@ -47,7 +47,10 @@ class QueueList extends Tracklist
       else if -1 == vote
         $el.find('.button-down').prop 'disabled', yes
     else
-      html      = @trackTemplate track : track
+      html      = @trackTemplate
+        track    : track
+        app      : bb.app
+        clientId : bb.app.set('client id')
       $el       = $ html
       track.$el = $el
 
