@@ -45,6 +45,7 @@ class QueueController extends ListController
     this
 
   trackRemoved: (track) ->
+    track = @view.list.collection.get track.uri
     @view.list.collection.remove track
     this
 

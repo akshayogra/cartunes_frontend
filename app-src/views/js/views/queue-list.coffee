@@ -17,8 +17,8 @@ class QueueList extends Tracklist
     @collection.on 'add change', (track) =>
       @addTrack track
 
-    @collection.on 'remove', (track) =>
-      @removeTrack track
+    @collection.on 'remove', (track, coll, opts) =>
+      @removeTrack track, opts
 
   el: '.panel-queue'
   template: require './templates/queue-list.jade'

@@ -34,6 +34,8 @@ class Tracklist extends bb.View
     @tracklist.on 'scroll', => @scroll()
     @scroll()
 
+    @trigger 'render'
+
     this
 
   scroll: (immediate = false) ->

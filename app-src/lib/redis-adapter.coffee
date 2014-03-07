@@ -1,5 +1,7 @@
 'use strict'
 
+helpers = require './mopidy.js'
+
 class RedisAdapter
   constructor: (redis, prefix = '') ->
     @redis  = redis
@@ -17,6 +19,8 @@ class RedisAdapter
   # @param Function done
   #
   getTracks: (uris, done) ->
+    return done null, [] unless uris.length
+
     gotTracks = (err, tracks) =>
       return done err if err
 
@@ -24,7 +28,7 @@ class RedisAdapter
       tracks = for track in tracks then JSON.parse track
       done null, tracks
 
-    @redis.hmget @key('tracks'), uris..., gotTracks
+    @redis.hmget @key('tracks'), uris, gotTracks
 
     this
 
@@ -40,6 +44,7 @@ class RedisAdapter
     # prefix:tracks uri json
     onExec = (err) -> done err
 
+    helpers.cleanTrack track
     track.updated = Date.now()
     @redis
       .multi()
@@ -54,6 +59,7 @@ class RedisAdapter
   downvoteTrack: (track, clientId, done) ->
     onExec = (err) -> done err
 
+    helpers.cleanTrack track
     track.updated = Date.now()
     @redis
       .multi()
@@ -74,10 +80,10 @@ class RedisAdapter
 
       for votes, index in results
         track = tracks[index]
-        track.voted = no
 
         unless votes
-          track.votes = 0
+          track.votes     = 0
+          track.votesHash = {}
           continue
 
         total = 0
@@ -101,8 +107,12 @@ class RedisAdapter
 
       votes = votes[0]
 
+      helpers.cleanTrack track
+      track.updated = Date.now()
+
       @redis
         .multi()
+        .hset @key('tracks'), track.uri, JSON.stringify track
         .hset @key('previous'), track.uri, votes
         .del @key('votes', track.uri)
         .zadd @key('pool'), track.uri, votes

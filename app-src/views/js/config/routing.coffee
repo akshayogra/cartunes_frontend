@@ -8,8 +8,8 @@ module.exports = (app) ->
   router  = app.set 'router'
 
   search  = new SearchController app
-  queue   = new QueueController app
   results = new ResultsController app
+  queue   = new QueueController app
 
   search.on 'query', (safeQuery) ->
     router.navigate "search/#{safeQuery}", trigger : yes

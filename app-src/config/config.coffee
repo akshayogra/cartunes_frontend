@@ -13,3 +13,4 @@ module.exports = (app) ->
   app.set 'javascript extension', config.javascriptExtension
 
   app.set 'queue max', config.maxQueueSize
+  app.set 'vote limit', config.voteLimit

@@ -11,6 +11,7 @@ class MopidyController extends Emitter
     @db      = app.set 'db'
     @playing = no
     @votes   = 0
+    @top     = null
 
     @setupListeners()
     @checkPlaying()
@@ -20,6 +21,12 @@ class MopidyController extends Emitter
     @app.on 'queue:downvote', (track, addr) => @queueDownvote track, addr
 
     @mopidy.on 'event:trackPlaybackStarted', (track) => @trackChange track.tl_track.track
+
+    @mopidy.on 'event:playbackStateChanged', (state) =>
+      unless 'playing' == state.new_state
+        @playing = no
+      else
+        @playing = yes
 
     this
 
@@ -72,7 +79,19 @@ class MopidyController extends Emitter
 
     gotVotes = (err) =>
       return if err
-      @triggerTrackChanged track
+
+      if app.set('vote limit') >= track.votes
+        @db.removeTrack track, trackRemoved
+
+        for client in @clients
+          client.queue?.trackRemoved? track
+      else
+        @triggerTrackChanged track
+
+    trackRemoved = (err) =>
+      throw err if err
+
+
 
     @db.downvoteTrack track, addr, downvoted
 
@@ -82,7 +101,11 @@ class MopidyController extends Emitter
     for client in @clients
       client.queue?.trackChanged? track
 
+    # Get top of queue
+    @queueNextTrack()
     @checkPlaying()
+
+    this
 
   queueUpdate: (oldTrack) ->
     gotQueue = (err, tracks) =>
@@ -92,10 +115,17 @@ class MopidyController extends Emitter
 
       if oldTrack
         for client in @clients
-          client.queue?.trackRemoved? track
+          client.queue?.trackRemoved? oldTrack
 
       for client in @clients
         client.queue?.trackChanged? track
+
+      # Set next track
+      @top = tracks[0].uri
+      helpers.setNextTrack @mopidy, tracks[0], nextTrackSet
+
+    nextTrackSet = (err) =>
+      throw err if err
 
     @db.getQueue @app.set('queue max'), gotQueue
 
@@ -112,11 +142,20 @@ class MopidyController extends Emitter
 
     this
 
-  queueChanged: ->
+  queueNextTrack: ->
     gotQueue = (err, tracks) =>
       return if err
+      return if @top == tracks[0].uri
+
+      @top = tracks[0].uri
+      helpers.setNextTrack @mopidy, tracks[0], setNextTrack
+
+    setNextTrack = (err) =>
+      throw err if err
 
     @db.getQueue @app.set('queue max'), gotQueue
+
+    this
 
   trackChange: (track) ->
     gotTracks = (err, tracks) =>
@@ -137,6 +176,7 @@ class MopidyController extends Emitter
     this
 
   setPlaying: (track) ->
+    console.error 'SETPLAYING', track
     this
 
 module.exports = MopidyController
