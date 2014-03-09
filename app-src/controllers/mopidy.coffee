@@ -33,6 +33,15 @@ class MopidyController extends Emitter
 
     @mopidy.on 'event:trackPlaybackStarted', (track) => @trackChange track.tl_track.track
 
+    @mopidy.on 'event:playbackStateChanged', (oldState, newState) =>
+      state = null
+      if 'playing' == newState
+        state = 'playing'
+      else
+        state = 'paused'
+
+      @stateChanged state
+
     @queue.on 'add change', (track) =>
       track = track.toJSON()
       for client in @clients
@@ -198,7 +207,28 @@ class MopidyController extends Emitter
       @queueUpdate()
       @setPlaying track
 
-    @db.setPooledVotes track, votes, setVotes
+    trackRemoved = (err) =>
+      throw err if err
+
+      @mopidy.playback.next()
+        .then onNext, (err) -> throw err
+
+    onNext = ->
+
+    if app.set('vote limit') >= votes
+      @db.removeTrack track, trackRemoved
+    else
+      @db.setPooledVotes track, votes, setVotes
+
+    this
+
+  stateChanged: (state) ->
+    gotTimePosition = (position) =>
+      for client in @clients
+        client.state?.change? state, position
+
+    @mopidy.playback.getTimePosition()
+      .then gotTimePosition, (err) -> throw err
 
     this
 

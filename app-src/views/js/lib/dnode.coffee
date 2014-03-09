@@ -15,5 +15,9 @@ module.exports = (app) ->
     current        :
       set          : (track) ->
         app.emit 'current:set', track
+
+    state          :
+      change       : (state, position) ->
+        app.emit "state:#{state}", position
   }
 
