@@ -13,7 +13,7 @@
   background-color: dw-yellow
   display: block
   height: 100%
-  width: 50%
+  width: 0
 
 .current-track
   background-color: black
@@ -22,8 +22,13 @@
   overflow: hidden
 
   .current-track-label
+  .track-cover
   .track-info
     float: left
+
+  .track-cover
+    grid-line-margin(0 0.25 0 0)
+    position: relative
 
   .current-buttons
     float: right

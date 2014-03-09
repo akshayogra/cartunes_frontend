@@ -17,8 +17,7 @@ class MopidyController extends Emitter
     @clients   = app.set 'dnode clients'
     @db        = app.set 'db'
     @queue     = new Queue
-    @votes     = 0
-    @votesHash = null
+    @current   = null
     @top       = null
 
     @setupListeners()
@@ -28,19 +27,23 @@ class MopidyController extends Emitter
     @app.on 'queue:add', (track, addr) => @queueAdd track, addr
     @app.on 'queue:downvote', (track, addr) => @queueDownvote track, addr
 
-    @app.on 'current:vote', (track, clientId)     => @votePlaying track, addr, 1
-    @app.on 'current:downvote', (track, clientId) => @votePlaying track, addr, -1
+    @app.on 'current:vote', (clientId)     => @votePlaying clientId, 1
+    @app.on 'current:downvote', (clientId) => @votePlaying clientId, -1
 
     @mopidy.on 'event:trackPlaybackStarted', (track) => @trackChange track.tl_track.track
 
-    @mopidy.on 'event:playbackStateChanged', (oldState, newState) =>
+    @mopidy.on 'event:playbackStateChanged', (s) =>
       state = null
-      if 'playing' == newState
+      if 'playing' == s.new_state
         state = 'playing'
       else
         state = 'paused'
 
       @stateChanged state
+
+    @mopidy.on 'event:seeked', (position) =>
+      for client in @clients
+        client.state?.change? 'playing', position
 
     @queue.on 'add change', (track) =>
       track = track.toJSON()
@@ -133,6 +136,15 @@ class MopidyController extends Emitter
 
       @queue.set tracks
 
+      if 0 == @queue.length
+        @top     = null
+        @current = null
+
+        for client in @clients
+          client.current?.set? null
+
+        return @mopidy.tracklist.clear()
+
       # Set next track
       return if @top == tracks[0].uri
       @top = tracks[0].uri
@@ -169,13 +181,17 @@ class MopidyController extends Emitter
       throw err if err
 
       # Save current vote state
-      @votes     = track.votes
-      @votesHash = track.votesHash
+      @current    =
+        votes     : track.votes
+        votesHash : track.votesHash
 
       @db.resetTrack track, trackReset
 
     trackReset = (err) =>
       throw err if err
+
+      @current.updated = track.updated
+
       @queueUpdate()
       @setPlaying track
 
@@ -184,41 +200,54 @@ class MopidyController extends Emitter
     this
 
   setPlaying: (track) ->
-    track.votes     = @votes
-    track.votesHash = @votesHash
+    track.votes     = @current.votes
+    track.votesHash = @current.votesHash
 
     for client in @clients
       client.current?.set? track
 
     this
 
-  votePlaying: (track, clientId, amount) ->
-    @votesHash[clientId] = amount
+  votePlaying: (clientId, amount) ->
+    return this unless @current
 
+    s = {}
+
+    @current.votesHash[clientId] = amount
     votes = 0
-    for client, value of @votesHash
+    for client, value of @current.votesHash
       votes += value
-    @votes = votes
+    @current.votes = votes
+
+    gotCurrentTrack = (track) =>
+      return unless track
+
+      s.track = track
+
+      if app.set('vote limit') >= votes
+        @db.removeTrack track, trackRemoved
+      else
+        @db.setPooledVotes track, votes, setVotes
+
+    trackRemoved = (err) =>
+      throw err if err
+
+      if 1 == @queue.length
+        @queueUpdate()
+
+      @mopidy.playback.next()
+        .then onNext, (err) -> throw err
+    onNext = ->
 
     setVotes = (err) =>
       throw err if err
 
       # Update playing track
       @queueUpdate()
-      @setPlaying track
+      @setPlaying s.track
 
-    trackRemoved = (err) =>
-      throw err if err
-
-      @mopidy.playback.next()
-        .then onNext, (err) -> throw err
-
-    onNext = ->
-
-    if app.set('vote limit') >= votes
-      @db.removeTrack track, trackRemoved
-    else
-      @db.setPooledVotes track, votes, setVotes
+    @mopidy.playback.getCurrentTrack()
+      .then gotCurrentTrack, (err) -> throw err
 
     this
 
@@ -229,6 +258,35 @@ class MopidyController extends Emitter
 
     @mopidy.playback.getTimePosition()
       .then gotTimePosition, (err) -> throw err
+
+    this
+
+  getPlaying: (done) ->
+    s = {}
+
+    gotCurrentTrack = (track) =>
+      return done() unless track
+
+      track.votes     = @current.votes
+      track.votesHash = @current.votesHash
+      track.updated   = @current.updated
+
+      s.track = track
+
+      @mopidy.playback.getState()
+        .then gotState, (err) -> done err
+
+    gotState = (state) =>
+      s.state = if 'playing' == state then state else 'paused'
+
+      @mopidy.playback.getTimePosition()
+        .then gotPosition, (err) -> done err
+
+    gotPosition = (position) =>
+      done null, s.track, s.state, position
+
+    @mopidy.playback.getCurrentTrack()
+      .then gotCurrentTrack, (err) -> done err
 
     this
 

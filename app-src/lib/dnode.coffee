@@ -4,9 +4,9 @@ helpers = require './mopidy.js'
 crypto  = require 'crypto'
 
 module.exports = (app) ->
-  clients = []
-  mopidy  = app.set 'mopidy'
-  db      = app.set 'db'
+  clients    = []
+  mopidy     = app.set 'mopidy'
+  db         = app.set 'db'
 
   app.set 'dnode clients', clients
 
@@ -17,6 +17,7 @@ module.exports = (app) ->
       index = clients.indexOf remote
       clients.splice index, 1
 
+    controller = app.set 'mopidy controller'
     addr = crypto.createHash 'sha1'
     addr.update dnode.stream.remoteAddress
     addr = addr.digest 'hex'
@@ -37,11 +38,14 @@ module.exports = (app) ->
           db.getQueue app.set('queue max'), done
 
       current    :
-        vote     : (track) ->
-          app.emit 'current:vote', track, addr
+        vote     : ->
+          app.emit 'current:vote', addr
 
-        downvote : (track) ->
-          app.emit 'current:downvote', track, addr
+        downvote : ->
+          app.emit 'current:downvote', addr
+
+        get      : (done) ->
+          controller.getPlaying done
 
       clients    :
         getId    : (done) ->
