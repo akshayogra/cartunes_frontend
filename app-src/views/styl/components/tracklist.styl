@@ -10,7 +10,6 @@
     text-overflow: ellipsis
     width: 100%
 
-
 .tracklist-buttons
   height: grid-line-em(2)
   line-height: grid-line-em(2)
@@ -54,11 +53,17 @@
   width: 100%
 
 .track-name
+.track-artist
   height: grid-line-em(1)
   grid-line-padding(0 2.25)
 
 .track-artist
   small()
   color: dw-dark-grey
-  height: grid-line-em(1, small-size)
-  grid-line-padding(0 2.25, small-size)
+
+.panel-queue
+  .track-name
+    grid-line-padding(0 5.25 0 2.25)
+
+  .track-artist
+    grid-line-padding(0 5.25 0 2.25, small-size)
