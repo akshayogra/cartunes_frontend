@@ -1,7 +1,14 @@
 'use strict'
 
+bb      = require 'backbone'
 Emitter = require('events').EventEmitter
 helpers = require '../lib/mopidy.js'
+
+class Track extends bb.Model
+  idAttribute: 'uri'
+
+class Queue extends bb.Collection
+  model: Track
 
 class MopidyController extends Emitter
   constructor: (app) ->
@@ -9,6 +16,7 @@ class MopidyController extends Emitter
     @mopidy    = app.set 'mopidy'
     @clients   = app.set 'dnode clients'
     @db        = app.set 'db'
+    @queue     = new Queue
     @votes     = 0
     @votesHash = null
     @top       = null
@@ -25,6 +33,16 @@ class MopidyController extends Emitter
 
     @mopidy.on 'event:trackPlaybackStarted', (track) => @trackChange track.tl_track.track
 
+    @queue.on 'add change', (track) =>
+      track = track.toJSON()
+      for client in @clients
+        client.queue?.trackChanged? track
+
+    @queue.on 'remove', (track) =>
+      track = track.toJSON()
+      for client in @clients
+        client.queue?.trackRemoved? track
+
     this
 
   checkPlaying: ->
@@ -35,6 +53,8 @@ class MopidyController extends Emitter
     gotQueue = (err, tracks) =>
       throw err if err
       return unless 0 < tracks.length
+
+      @queue.set tracks
 
       track = helpers.cleanTrack tracks[0]
 
@@ -81,45 +101,31 @@ class MopidyController extends Emitter
 
       if app.set('vote limit') >= track.votes
         @db.removeTrack track, trackRemoved
-
-        for client in @clients
-          client.queue?.trackRemoved? track
       else
         @triggerTrackChanged track
 
     trackRemoved = (err) =>
       throw err if err
-
-
+      @queue.remove track
 
     @db.downvoteTrack track, addr, downvoted
 
     this
 
-  triggerTrackChanged: (track) ->
-    for client in @clients
-      client.queue?.trackChanged? track
-
-    # Get top of queue
-    @queueNextTrack()
+  triggerTrackChanged: ->
+    @queueUpdate()
     @checkPlaying()
 
     this
 
-  queueUpdate: (oldTrack) ->
+  queueUpdate: ->
     gotQueue = (err, tracks) =>
       throw err if err
 
-      track = tracks[tracks.length - 1]
-
-      if oldTrack
-        for client in @clients
-          client.queue?.trackRemoved? oldTrack
-
-      for client in @clients
-        client.queue?.trackChanged? track
+      @queue.set tracks
 
       # Set next track
+      return if @top == tracks[0].uri
       @top = tracks[0].uri
       helpers.setNextTrack @mopidy, tracks[0], nextTrackSet
 
@@ -136,21 +142,6 @@ class MopidyController extends Emitter
 
       for client in @clients
         client.queue?.refresh? tracks
-
-    @db.getQueue @app.set('queue max'), gotQueue
-
-    this
-
-  queueNextTrack: ->
-    gotQueue = (err, tracks) =>
-      return if err
-      return if @top == tracks[0].uri
-
-      @top = tracks[0].uri
-      helpers.setNextTrack @mopidy, tracks[0], setNextTrack
-
-    setNextTrack = (err) =>
-      throw err if err
 
     @db.getQueue @app.set('queue max'), gotQueue
 
@@ -176,7 +167,7 @@ class MopidyController extends Emitter
 
     trackReset = (err) =>
       throw err if err
-      @queueUpdate track
+      @queueUpdate()
       @setPlaying track
 
     @db.getTracks [track.uri], gotTracks
@@ -204,6 +195,7 @@ class MopidyController extends Emitter
       throw err if err
 
       # Update playing track
+      @queueUpdate()
       @setPlaying track
 
     @db.setPooledVotes track, votes, setVotes

@@ -1,7 +1,6 @@
 'use strict'
 
 bb = require 'backbone'
-require 'backbone.epoxy'
 
 SearchBar  = require './search-bar.coffee'
 Results    = require './results.coffee'

@@ -1,7 +1,6 @@
 'use strict'
 
 bb = require 'backbone'
-require 'backbone.epoxy'
 
 class Track extends bb.Model
   @COVER_CACHE = {}
