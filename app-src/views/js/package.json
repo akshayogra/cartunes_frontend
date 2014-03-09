@@ -10,8 +10,6 @@
   "license": "MIT",
   "dependencies": {
     "underscore": "^1.6.0",
-    "backbone": "^1.1.2",
-    "backbone.epoxy": "git://github.com/thechurch/backbone.epoxy.git",
     "jquery": "^2.1.0",
     "shoe": "0.0.15",
     "reconnect-core": "0.0.1",
