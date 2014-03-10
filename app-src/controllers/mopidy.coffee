@@ -38,6 +38,9 @@ class MopidyController extends Emitter
       else if 'stopped' == s.new_state
         @current = null
 
+        if 0 == @queue.length
+          @queueUpdate()
+
       @stateChanged state
 
     @mopidy.on 'event:seeked', (position) =>
@@ -255,7 +258,7 @@ class MopidyController extends Emitter
   stateChanged: (state) ->
     gotTimePosition = (position) =>
       for client in @clients
-        client.state?.change? state, position
+        client.state?.change? state, position || 0
 
     @mopidy.playback.getTimePosition()
       .then gotTimePosition, (err) -> throw err
