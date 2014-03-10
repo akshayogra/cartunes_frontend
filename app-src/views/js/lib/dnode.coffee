@@ -13,8 +13,8 @@ module.exports = (app) ->
         app.emit 'queue:refresh', tracks
 
     current        :
-      set          : (track) ->
-        app.emit 'current:set', track
+      set          : (track, position) ->
+        app.emit 'current:set', track, position
 
     state          :
       change       : (state, position) ->

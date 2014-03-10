@@ -14,11 +14,11 @@ class CurrentController extends AppController
     @current  = null
     @coverQ   = app.set 'cover queue'
 
-    @app.on 'current:set', (track) =>
+    @app.on 'current:set', (track, position) =>
       return @clearCurrent() unless track
 
       track = new Track track
-      @setCurrent track
+      @setCurrent track, position
 
     @app.on 'state:paused', (position) =>
       return @clearCurrent() unless @current

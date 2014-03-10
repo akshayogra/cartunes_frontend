@@ -190,18 +190,18 @@ class MopidyController extends Emitter
       @current.updated = track.updated
 
       @queueUpdate()
-      @setPlaying track
+      @setPlaying track, 0
 
     @db.getTracks [track.uri], gotTracks
 
     this
 
-  setPlaying: (track) ->
+  setPlaying: (track, position = 0) ->
     track.votes     = @current.votes
     track.votesHash = @current.votesHash
 
     for client in @clients
-      client.current?.set? track
+      client.current?.set? track, position
 
     this
 
@@ -241,7 +241,12 @@ class MopidyController extends Emitter
 
       # Update playing track
       @queueUpdate()
-      @setPlaying s.track
+
+      @mopidy.playback.getTimePosition()
+        .then gotTimePosition, (err) -> throw err
+
+    gotTimePosition = (position) =>
+      @setPlaying s.track, position
 
     @mopidy.playback.getCurrentTrack()
       .then gotCurrentTrack, (err) -> throw err
@@ -263,6 +268,12 @@ class MopidyController extends Emitter
 
     gotCurrentTrack = (track) =>
       return done() unless track
+
+      unless @current
+        @current    =
+          votes     : 0
+          votesHash : {}
+          updated   : Date.now()
 
       track.votes     = @current.votes
       track.votesHash = @current.votesHash
