@@ -58,8 +58,7 @@ Icon
 .Spotlight-V100
 .Trashes
 
-# Ignore build directory
-app/
-
 # Ignore config
 config.json
+
+app/views/
