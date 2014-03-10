@@ -7,6 +7,7 @@ app         = express()
 shoe        = shoe()
 
 app.set('shoe', shoe)
+app.set('env', 'production')
 
 mapp(app, function (err) {
   if (err) throw err
