@@ -219,7 +219,7 @@ MopidyController = (function(_super) {
         if (err) {
           throw err;
         }
-        return _this.queue.remove(track);
+        return _this.queueUpdate();
       };
     })(this);
     this.db.downvoteTrack(track, addr, downvoted);
@@ -352,12 +352,12 @@ MopidyController = (function(_super) {
       return this;
     }
     s = {};
-    this.current.votesHash[clientId] = amount;
+    this.current.votesHash[clientId] = +amount;
     votes = 0;
     _ref = this.current.votesHash;
     for (client in _ref) {
       value = _ref[client];
-      votes += value;
+      votes += +value;
     }
     this.current.votes = votes;
     gotCurrentTrack = (function(_this) {

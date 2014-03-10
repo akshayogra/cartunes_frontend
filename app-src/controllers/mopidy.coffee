@@ -210,10 +210,10 @@ class MopidyController extends Emitter
 
     s = {}
 
-    @current.votesHash[clientId] = amount
+    @current.votesHash[clientId] = +amount
     votes = 0
     for client, value of @current.votesHash
-      votes += value
+      votes += +value
     @current.votes = votes
 
     gotCurrentTrack = (track) =>
