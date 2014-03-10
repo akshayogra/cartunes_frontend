@@ -32,11 +32,11 @@ class MopidyController extends Emitter
     @mopidy.on 'event:trackPlaybackStarted', (track) => @trackChange track.tl_track.track
 
     @mopidy.on 'event:playbackStateChanged', (s) =>
-      state = null
+      state = 'paused'
       if 'playing' == s.new_state
         state = 'playing'
-      else
-        state = 'paused'
+      else if 'stopped' == s.new_state
+        @current = null
 
       @stateChanged state
 
@@ -129,26 +129,25 @@ class MopidyController extends Emitter
 
     this
 
-  queueUpdate: ->
+  queueUpdate: (done) ->
     gotQueue = (err, tracks) =>
       throw err if err
 
       @queue.set tracks
 
-      if 0 == @queue.length
-        @current = null
-
+      if 0 == @queue.length && !@current
         for client in @clients
-          client.current?.set? null
-
+          client.current?.set? null, 0
         return @mopidy.tracklist.clear()
+      else if 0 == @queue.length
+        return helpers.clear @mopidy, ->
 
       # Set next track
-      @top = tracks[0].uri
       helpers.setNextTrack @mopidy, tracks[0], nextTrackSet
 
     nextTrackSet = (err) =>
       throw err if err
+      done() if done
 
     @db.getQueue @app.set('queue max'), gotQueue
 
@@ -228,10 +227,10 @@ class MopidyController extends Emitter
 
     trackRemoved = (err) =>
       throw err if err
+      @current = null
+      @queueUpdate queueUpdated
 
-      if 1 == @queue.length
-        @queueUpdate()
-
+    queueUpdated = =>
       @mopidy.playback.next()
         .then onNext, (err) -> throw err
     onNext = ->
