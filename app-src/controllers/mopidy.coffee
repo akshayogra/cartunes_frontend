@@ -117,7 +117,7 @@ class MopidyController extends Emitter
 
     trackRemoved = (err) =>
       throw err if err
-      @queue.remove track
+      @queueUpdate()
 
     @db.downvoteTrack track, addr, downvoted
 

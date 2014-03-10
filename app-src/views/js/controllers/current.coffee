@@ -62,8 +62,6 @@ class CurrentController extends AppController
     this
 
   setCurrent: (track, position = 0) ->
-    console.log 'SETCURRENT'
-
     @started = Date.now()
     @offset  = position
     @current = track
