@@ -5,4 +5,5 @@
 , "javascriptExtension" : ".js"
 , "maxQueueSize"        : 30
 , "voteLimit"           : -3
+, "port"                : 8080
 }

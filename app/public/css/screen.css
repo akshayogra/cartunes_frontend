@@ -914,10 +914,6 @@ input.search-input {
   top: 0;
 }
 .current-buttons button {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  border-left: 1px solid #999;
   display: block;
   float: left;
   height: 3em;
@@ -925,10 +921,6 @@ input.search-input {
   width: 3em;
 }
 .current-buttons .track-votes {
-  border-left: 1px solid #999;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
   display: block;
   float: left;
   text-align: center;

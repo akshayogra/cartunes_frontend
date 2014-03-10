@@ -2,6 +2,7 @@ var express = require('express')
 var http    = require('http')
 var mapp    = require('./app')
 var shoe    = require('shoe')
+var config  = require('./config.json')
 
 app         = express()
 shoe        = shoe()
@@ -15,8 +16,8 @@ mapp(app, function (err) {
   var server = http.createServer()
   server.on('request', app)
 
-  server.listen(8080)
+  server.listen(config.port)
   shoe.install(server, '/shoe')
 
-  console.error('Listening on http://127.0.0.1:8080')
+  console.error('Listening on http://127.0.0.1:' + config.port)
 })
