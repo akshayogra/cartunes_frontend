@@ -323,15 +323,18 @@ MopidyController = (function(_super) {
         }
         _this.current.updated = track.updated;
         _this.queueUpdate();
-        return _this.setPlaying(track);
+        return _this.setPlaying(track, 0);
       };
     })(this);
     this.db.getTracks([track.uri], gotTracks);
     return this;
   };
 
-  MopidyController.prototype.setPlaying = function(track) {
+  MopidyController.prototype.setPlaying = function(track, position) {
     var client, _i, _len, _ref, _ref1;
+    if (position == null) {
+      position = 0;
+    }
     track.votes = this.current.votes;
     track.votesHash = this.current.votesHash;
     _ref = this.clients;
@@ -339,7 +342,7 @@ MopidyController = (function(_super) {
       client = _ref[_i];
       if ((_ref1 = client.current) != null) {
         if (typeof _ref1.set === "function") {
-          _ref1.set(track);
+          _ref1.set(track, position);
         }
       }
     }
@@ -347,7 +350,7 @@ MopidyController = (function(_super) {
   };
 
   MopidyController.prototype.votePlaying = function(clientId, amount) {
-    var client, gotCurrentTrack, onNext, s, setVotes, trackRemoved, value, votes, _ref;
+    var client, gotCurrentTrack, gotTimePosition, onNext, s, setVotes, trackRemoved, value, votes, _ref;
     if (!this.current) {
       return this;
     }
@@ -393,7 +396,14 @@ MopidyController = (function(_super) {
           throw err;
         }
         _this.queueUpdate();
-        return _this.setPlaying(s.track);
+        return _this.mopidy.playback.getTimePosition().then(gotTimePosition, function(err) {
+          throw err;
+        });
+      };
+    })(this);
+    gotTimePosition = (function(_this) {
+      return function(position) {
+        return _this.setPlaying(s.track, position);
       };
     })(this);
     this.mopidy.playback.getCurrentTrack().then(gotCurrentTrack, function(err) {
@@ -429,6 +439,13 @@ MopidyController = (function(_super) {
       return function(track) {
         if (!track) {
           return done();
+        }
+        if (!_this.current) {
+          _this.current = {
+            votes: 0,
+            votesHash: {},
+            updated: Date.now()
+          };
         }
         track.votes = _this.current.votes;
         track.votesHash = _this.current.votesHash;
