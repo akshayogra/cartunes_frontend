@@ -18,7 +18,6 @@ class MopidyController extends Emitter
     @db        = app.set 'db'
     @queue     = new Queue
     @current   = null
-    @top       = null
 
     @setupListeners()
     @checkPlaying()
@@ -137,7 +136,6 @@ class MopidyController extends Emitter
       @queue.set tracks
 
       if 0 == @queue.length
-        @top     = null
         @current = null
 
         for client in @clients
@@ -146,7 +144,6 @@ class MopidyController extends Emitter
         return @mopidy.tracklist.clear()
 
       # Set next track
-      return if @top == tracks[0].uri
       @top = tracks[0].uri
       helpers.setNextTrack @mopidy, tracks[0], nextTrackSet
 

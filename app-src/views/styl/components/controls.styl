@@ -20,18 +20,7 @@
   color: white
   height: grid-line-em(2)
   overflow: hidden
-
-  .current-track-label
-  .track-cover
-  .track-info
-    float: left
-
-  .track-cover
-    grid-line-margin(0 0.25 0 0)
-    position: relative
-
-  .current-buttons
-    float: right
+  position: relative
 
 .current-track-label
   display: block
@@ -40,18 +29,36 @@
   grid-line-padding(0 1)
 
 .track-info
+  box-sizing: border-box
+  grid-line-padding(0 5.25 0 2.25)
+
   .track-name
   .track-artist
     padding: 0
 
 .current-buttons
-  float: right
   height: 100%
   line-height: grid-line-em(2)
-  grid-line-padding(0 1)
+  position: absolute
+  right: 0
+  top: 0
+
+  button
+    box-sizing: border-box
+    border-left: 1px solid dw-dark-grey
+    display: block
+    float: left
+    height: grid-line-em(2)
+    line-height: grid-line-em(2)
+    width: grid-line-em(2)
 
   .track-votes
-    grid-line-padding(0 0.5)
+    border-left: 1px solid dw-dark-grey
+    box-sizing: border-box
+    display: block
+    float: left
+    text-align: center
+    width: grid-line-em(1)
 
   .button
     color: white

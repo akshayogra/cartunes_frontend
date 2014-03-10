@@ -66,6 +66,7 @@ class CurrentBar extends bb.View
     @artist.html ''
     @votes.html 0
     @buttons.prop 'disabled', yes
+    @setPosition 0
 
     this
 
