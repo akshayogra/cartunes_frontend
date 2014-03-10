@@ -84,6 +84,9 @@ MopidyController = (function(_super) {
           state = 'playing';
         } else if ('stopped' === s.new_state) {
           _this.current = null;
+          if (0 === _this.queue.length) {
+            _this.queueUpdate();
+          }
         }
         return _this.stateChanged(state);
       };
@@ -427,7 +430,7 @@ MopidyController = (function(_super) {
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           client = _ref[_i];
-          _results.push((_ref1 = client.state) != null ? typeof _ref1.change === "function" ? _ref1.change(state, position) : void 0 : void 0);
+          _results.push((_ref1 = client.state) != null ? typeof _ref1.change === "function" ? _ref1.change(state, position || 0) : void 0 : void 0);
         }
         return _results;
       };
