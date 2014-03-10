@@ -1,10 +1,7 @@
 {
-  "name": "dwp",
+  "name": "dplyr",
   "version": "0.1.0",
   "description": "A jukebox for mopidy",
-  "scripts": {
-    "postinstall": "cd app-src/views/js && npm install"
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/thechurch/dwp.git"
