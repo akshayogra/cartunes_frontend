@@ -79,11 +79,11 @@ MopidyController = (function(_super) {
     this.mopidy.on('event:playbackStateChanged', (function(_this) {
       return function(s) {
         var state;
-        state = null;
+        state = 'paused';
         if ('playing' === s.new_state) {
           state = 'playing';
-        } else {
-          state = 'paused';
+        } else if ('stopped' === s.new_state) {
+          _this.current = null;
         }
         return _this.stateChanged(state);
       };
@@ -232,7 +232,7 @@ MopidyController = (function(_super) {
     return this;
   };
 
-  MopidyController.prototype.queueUpdate = function() {
+  MopidyController.prototype.queueUpdate = function(done) {
     var gotQueue, nextTrackSet;
     gotQueue = (function(_this) {
       return function(err, tracks) {
@@ -241,20 +241,20 @@ MopidyController = (function(_super) {
           throw err;
         }
         _this.queue.set(tracks);
-        if (0 === _this.queue.length) {
-          _this.current = null;
+        if (0 === _this.queue.length && !_this.current) {
           _ref = _this.clients;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             client = _ref[_i];
             if ((_ref1 = client.current) != null) {
               if (typeof _ref1.set === "function") {
-                _ref1.set(null);
+                _ref1.set(null, 0);
               }
             }
           }
           return _this.mopidy.tracklist.clear();
+        } else if (0 === _this.queue.length) {
+          return helpers.clear(_this.mopidy, function() {});
         }
-        _this.top = tracks[0].uri;
         return helpers.setNextTrack(_this.mopidy, tracks[0], nextTrackSet);
       };
     })(this);
@@ -262,6 +262,9 @@ MopidyController = (function(_super) {
       return function(err) {
         if (err) {
           throw err;
+        }
+        if (done) {
+          return done();
         }
       };
     })(this);
@@ -350,7 +353,7 @@ MopidyController = (function(_super) {
   };
 
   MopidyController.prototype.votePlaying = function(clientId, amount) {
-    var client, gotCurrentTrack, gotTimePosition, onNext, s, setVotes, trackRemoved, value, votes, _ref;
+    var client, gotCurrentTrack, gotTimePosition, onNext, queueUpdated, s, setVotes, trackRemoved, value, votes, _ref;
     if (!this.current) {
       return this;
     }
@@ -381,9 +384,12 @@ MopidyController = (function(_super) {
         if (err) {
           throw err;
         }
-        if (1 === _this.queue.length) {
-          _this.queueUpdate();
-        }
+        _this.current = null;
+        return _this.queueUpdate(queueUpdated);
+      };
+    })(this);
+    queueUpdated = (function(_this) {
+      return function() {
         return _this.mopidy.playback.next().then(onNext, function(err) {
           throw err;
         });
