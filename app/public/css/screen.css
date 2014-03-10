@@ -706,6 +706,7 @@ html,
 body {
   height: 100%;
   width: 100%;
+  font-family: 'Avenir', 'Helvetica', 'Helvetica Neue', 'Arial', sans-serif;
 }
 .logo {
   display: none;
