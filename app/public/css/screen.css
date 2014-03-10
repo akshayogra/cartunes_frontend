@@ -849,8 +849,7 @@ input.search-input {
   white-space: nowrap;
   width: 100%;
 }
-.track-name,
-.track-artist {
+.track-name {
   height: 1.5em;
   padding: 0em 3.375em;
 }
@@ -858,6 +857,8 @@ input.search-input {
   font-size: 0.8125em;
   line-height: 1.3846153846153846em;
   color: #999;
+  height: 1.8461538461538463em;
+  padding: 0em 4.153846153846154em;
 }
 .panel-queue .track-name {
   padding: 0em 7.875em 0em 3.375em;
@@ -887,18 +888,7 @@ input.search-input {
   color: #fff;
   height: 3em;
   overflow: hidden;
-}
-.current-track .current-track-label,
-.current-track .track-cover,
-.current-track .track-info {
-  float: left;
-}
-.current-track .track-cover {
-  margin: 0em 0.375em 0em 0em;
   position: relative;
-}
-.current-track .current-buttons {
-  float: right;
 }
 .current-track-label {
   display: block;
@@ -906,18 +896,43 @@ input.search-input {
   line-height: 3em;
   padding: 0em 1.5em;
 }
+.track-info {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0em 7.875em 0em 3.375em;
+}
 .track-info .track-name,
 .track-info .track-artist {
   padding: 0;
 }
 .current-buttons {
-  float: right;
   height: 100%;
   line-height: 3em;
-  padding: 0em 1.5em;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.current-buttons button {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border-left: 1px solid #999;
+  display: block;
+  float: left;
+  height: 3em;
+  line-height: 3em;
+  width: 3em;
 }
 .current-buttons .track-votes {
-  padding: 0em 0.75em;
+  border-left: 1px solid #999;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: block;
+  float: left;
+  text-align: center;
+  width: 1.5em;
 }
 .current-buttons .button {
   color: #fff;

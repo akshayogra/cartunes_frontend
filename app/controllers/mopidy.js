@@ -46,7 +46,6 @@ MopidyController = (function(_super) {
     this.db = app.set('db');
     this.queue = new Queue;
     this.current = null;
-    this.top = null;
     this.setupListeners();
     this.checkPlaying();
   }
@@ -243,7 +242,6 @@ MopidyController = (function(_super) {
         }
         _this.queue.set(tracks);
         if (0 === _this.queue.length) {
-          _this.top = null;
           _this.current = null;
           _ref = _this.clients;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -255,9 +253,6 @@ MopidyController = (function(_super) {
             }
           }
           return _this.mopidy.tracklist.clear();
-        }
-        if (_this.top === tracks[0].uri) {
-          return;
         }
         _this.top = tracks[0].uri;
         return helpers.setNextTrack(_this.mopidy, tracks[0], nextTrackSet);
