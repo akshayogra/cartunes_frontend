@@ -882,6 +882,11 @@ input.search-input {
   background-color: #fef200;
   display: block;
   height: 100%;
+  -webkit-transition: 1s width linear;
+  -moz-transition: 1s width linear;
+  -o-transition: 1s width linear;
+  -ms-transition: 1s width linear;
+  transition: 1s width linear;
   width: 0;
 }
 .current-track {
