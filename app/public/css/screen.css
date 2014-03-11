@@ -731,6 +731,10 @@ input.input {
   font-size: 1em;
   line-height: 1.5em;
 }
+:focus {
+  outline-color: transparent;
+  outline-style: none;
+}
 .search-wrap {
   background-color: #ff0;
   overflow: hidden;
@@ -980,8 +984,11 @@ input.search-input {
     width: 3.75em;
   }
   .track-name {
-    margin: 0.6000000000000001em 0em 0em;
+    margin: 0.5249999999999999em 0em 0em;
     padding: 0em 4.5em;
+  }
+  .track-info .track-name {
+    margin: 0.22499999999999998em 0em 0em;
   }
   .track-artist {
     padding: 0em 5.538461538461538em;
@@ -1011,7 +1018,7 @@ input.search-input {
     width: 3.75em;
   }
   .track-info {
-    padding: 0.375em 9.375em 0em 5.25em;
+    padding: 0.375em 9.375em 0em 4.5em;
   }
   .current-buttons button {
     font-size: 1.375em;
