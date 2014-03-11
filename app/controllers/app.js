@@ -13,7 +13,7 @@ AppController = (function() {
 
   AppController.prototype.setup = function(req, res) {
     res.locals(this.defaults);
-    return res.locals.request = req;
+    res.locals.request = req;
   };
 
   AppController.prototype.model = function(model) {};

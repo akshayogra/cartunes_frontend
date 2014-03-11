@@ -24,6 +24,7 @@ class AppController
   setup: (req, res) ->
     res.locals @defaults
     res.locals.request = req
+    return
 
   #
   # Get a model
@@ -31,6 +32,7 @@ class AppController
   # @param String model
   #
   model: (model) ->
+    return
 
   #
   # Call a route and ensure it is correctly bound

@@ -4,6 +4,7 @@ exports.cleanTrack = (track) ->
   delete track.votes
   delete track.votesHash
   delete track.updated
+  return track
 
 exports.search = (m, query, done) ->
   promise = m.library.search any : query
@@ -16,6 +17,8 @@ exports.search = (m, query, done) ->
       tracks.push searchResults.tracks...
 
     done null, tracks
+    results = tracks = null
+    return
 
   gotError = (err) -> done err
 
@@ -23,11 +26,15 @@ exports.search = (m, query, done) ->
 
 exports.onError = (err) ->
   console.error err.stack
+  return
 
 exports.clear = (m, done) ->
-  onError = (err) -> done err
-
   s = {}
+
+  onError = (err) ->
+    done err
+    s = null
+    return
 
   gotCurrentTrack = (tlTrack) ->
     if tlTrack
@@ -35,6 +42,7 @@ exports.clear = (m, done) ->
         .then gotIndex, onError
     else
       gotPrevious []
+    return
 
   gotIndex = (index) ->
     s.current = index
@@ -44,12 +52,14 @@ exports.clear = (m, done) ->
     else
       m.tracklist.slice 0, index
         .then gotPrevious, onError
+    return
 
   gotPrevious = (tlTracks) ->
     s.previous = tlTracks
 
     m.tracklist.slice s.current + 1, Infinity
       .then gotTracks, onError
+    return
 
   gotTracks = (tracks) ->
     tracks or= []
@@ -58,6 +68,8 @@ exports.clear = (m, done) ->
     ids = for track in tracks then track.tlid
     m.tracklist.remove tlid : ids
       .then onRemove, onError
+    s = ids = tracks = null
+    return
 
   onRemove = -> done()
 
@@ -74,6 +86,7 @@ exports.setNextTrack = (m, track, done) ->
 
     m.tracklist.add [track], null
       .then onAdd, onError
+    return
   onAdd = -> done()
 
   exports.clear m, onClear

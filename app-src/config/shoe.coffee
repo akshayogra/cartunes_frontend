@@ -5,6 +5,6 @@ module.exports = (app) ->
   api  = require('../lib/dnode.js')(app)
 
   shoe.on 'connection', (stream) ->
-    d        = dnode api
+    d        = dnode api, weak : no
     d.stream = stream
     d.pipe(stream).pipe(d)

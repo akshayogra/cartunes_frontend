@@ -9,7 +9,9 @@ module.exports = function(app) {
   api = require('../lib/dnode.js')(app);
   return shoe.on('connection', function(stream) {
     var d;
-    d = dnode(api);
+    d = dnode(api, {
+      weak: false
+    });
     d.stream = stream;
     return d.pipe(stream).pipe(d);
   });

@@ -15,46 +15,47 @@ module.exports = function(app) {
   return function(remote, dnode) {
     var addr, controller;
     clients.push(remote);
-    dnode.once('end', function() {
-      var index;
-      index = clients.indexOf(remote);
-      return clients.splice(index, 1);
-    });
     controller = app.set('mopidy controller');
     addr = crypto.createHash('sha1');
     addr.update(dnode.stream.remoteAddress);
     addr = addr.digest('hex');
+    dnode.once('end', function() {
+      var index;
+      index = clients.indexOf(remote);
+      clients.splice(index, 1);
+      addr = controller = remote = dnode = null;
+    });
     return {
       db: {
         search: function(query, done) {
-          return helpers.search(mopidy, query, done);
+          helpers.search(mopidy, query, done);
         }
       },
       queue: {
         add: function(track) {
-          return app.emit('queue:add', track, addr);
+          app.emit('queue:add', track, addr);
         },
         downvote: function(track) {
-          return app.emit('queue:downvote', track, addr);
+          app.emit('queue:downvote', track, addr);
         },
         get: function(done) {
-          return db.getQueue(app.set('queue max'), done);
+          db.getQueue(app.set('queue max'), done);
         }
       },
       current: {
         vote: function() {
-          return app.emit('current:vote', addr);
+          app.emit('current:vote', addr);
         },
         downvote: function() {
-          return app.emit('current:downvote', addr);
+          app.emit('current:downvote', addr);
         },
         get: function(done) {
-          return controller.getPlaying(done);
+          controller.getPlaying(done);
         }
       },
       clients: {
         getId: function(done) {
-          return done(null, addr);
+          done(null, addr);
         }
       }
     };

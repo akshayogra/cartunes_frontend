@@ -10,7 +10,8 @@ class RedisAdapter
   key: ->
     args = []
     args.push arguments...
-    "#{@prefix}#{args.join ':'}"
+    args = args.join ':'
+    return "#{@prefix}#{args}"
 
   #
   # Get an array of tracks from uri's
@@ -27,6 +28,8 @@ class RedisAdapter
       return done null, [] unless tracks
       tracks = for track in tracks then JSON.parse track
       done null, tracks
+      uris = tracks = null
+      return
 
     @redis.hmget @key('tracks'), uris, gotTracks
 
@@ -42,7 +45,9 @@ class RedisAdapter
   voteTrack: (track, clientId, done) ->
     # prefix:votes:uri clientid 1
     # prefix:tracks uri json
-    onExec = (err) -> done err
+    onExec = (err) ->
+      done err
+      return
 
     helpers.cleanTrack track
     track.updated = Date.now()
@@ -57,7 +62,9 @@ class RedisAdapter
     this
 
   downvoteTrack: (track, clientId, done) ->
-    onExec = (err) -> done err
+    onExec = (err) ->
+      done err
+      return
 
     helpers.cleanTrack track
     track.updated = Date.now()
@@ -93,6 +100,8 @@ class RedisAdapter
         track.votesHash = votes
 
       done null, tracks
+      track = tracks = null
+      return
 
     multi = @redis.multi()
     for track in tracks then multi.hgetall @key('votes', track.uri)
@@ -117,6 +126,8 @@ class RedisAdapter
         .del @key('votes', track.uri)
         .zadd @key('pool'), track.uri, votes
         .exec onExec
+      track = null
+      return
 
     onExec = (err) -> done err
 
@@ -177,12 +188,14 @@ class RedisAdapter
       s.uris.push poolUris...
 
       @getTracks s.uris, gotTracks
+      return
 
     gotTracks = (err, tracks) =>
       return done err if err
 
       s.tracks = tracks
       @getVotes s.tracks, gotVotes
+      return
 
     gotVotes = (err) =>
       return done err if err
@@ -198,6 +211,7 @@ class RedisAdapter
 
       done null, s.tracks
       s = null
+      return
 
     this
 

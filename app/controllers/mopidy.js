@@ -53,27 +53,27 @@ MopidyController = (function(_super) {
   MopidyController.prototype.setupListeners = function() {
     this.app.on('queue:add', (function(_this) {
       return function(track, addr) {
-        return _this.queueAdd(track, addr);
+        _this.queueAdd(track, addr);
       };
     })(this));
     this.app.on('queue:downvote', (function(_this) {
       return function(track, addr) {
-        return _this.queueDownvote(track, addr);
+        _this.queueDownvote(track, addr);
       };
     })(this));
     this.app.on('current:vote', (function(_this) {
       return function(clientId) {
-        return _this.votePlaying(clientId, 1);
+        _this.votePlaying(clientId, 1);
       };
     })(this));
     this.app.on('current:downvote', (function(_this) {
       return function(clientId) {
-        return _this.votePlaying(clientId, -1);
+        _this.votePlaying(clientId, -1);
       };
     })(this));
     this.mopidy.on('event:trackPlaybackStarted', (function(_this) {
       return function(track) {
-        return _this.trackChange(track.tl_track.track);
+        _this.trackChange(track.tl_track.track);
       };
     })(this));
     this.mopidy.on('event:playbackStateChanged', (function(_this) {
@@ -88,45 +88,54 @@ MopidyController = (function(_super) {
             _this.queueUpdate();
           }
         }
-        return _this.stateChanged(state);
+        _this.stateChanged(state);
       };
     })(this));
     this.mopidy.on('event:seeked', (function(_this) {
       return function(position) {
-        var client, _i, _len, _ref, _ref1, _results;
+        var client, _i, _len, _ref, _ref1;
         _ref = _this.clients;
-        _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           client = _ref[_i];
-          _results.push((_ref1 = client.state) != null ? typeof _ref1.change === "function" ? _ref1.change('playing', position) : void 0 : void 0);
+          if ((_ref1 = client.state) != null) {
+            if (typeof _ref1.change === "function") {
+              _ref1.change('playing', position);
+            }
+          }
         }
-        return _results;
+        client = null;
       };
     })(this));
     this.queue.on('add change', (function(_this) {
       return function(track) {
-        var client, _i, _len, _ref, _ref1, _results;
+        var client, _i, _len, _ref, _ref1;
         track = track.toJSON();
         _ref = _this.clients;
-        _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           client = _ref[_i];
-          _results.push((_ref1 = client.queue) != null ? typeof _ref1.trackChanged === "function" ? _ref1.trackChanged(track) : void 0 : void 0);
+          if ((_ref1 = client.queue) != null) {
+            if (typeof _ref1.trackChanged === "function") {
+              _ref1.trackChanged(track);
+            }
+          }
         }
-        return _results;
+        client = null;
       };
     })(this));
     this.queue.on('remove', (function(_this) {
       return function(track) {
-        var client, _i, _len, _ref, _ref1, _results;
+        var client, _i, _len, _ref, _ref1;
         track = track.toJSON();
         _ref = _this.clients;
-        _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           client = _ref[_i];
-          _results.push((_ref1 = client.queue) != null ? typeof _ref1.trackRemoved === "function" ? _ref1.trackRemoved(track) : void 0 : void 0);
+          if ((_ref1 = client.queue) != null) {
+            if (typeof _ref1.trackRemoved === "function") {
+              _ref1.trackRemoved(track);
+            }
+          }
         }
-        return _results;
+        client = null;
       };
     })(this));
     return this;
@@ -139,7 +148,7 @@ MopidyController = (function(_super) {
         if (state === 'playing') {
           return;
         }
-        return _this.db.getQueue(_this.app.set('queue max'), gotQueue);
+        _this.db.getQueue(_this.app.set('queue max'), gotQueue);
       };
     })(this);
     gotQueue = (function(_this) {
@@ -153,7 +162,7 @@ MopidyController = (function(_super) {
         }
         _this.queue.set(tracks);
         track = helpers.cleanTrack(tracks[0]);
-        return helpers.setNextTrack(_this.mopidy, tracks[0], trackSet);
+        helpers.setNextTrack(_this.mopidy, tracks[0], trackSet);
       };
     })(this);
     trackSet = (function(_this) {
@@ -161,7 +170,7 @@ MopidyController = (function(_super) {
         if (err) {
           throw err;
         }
-        return _this.mopidy.playback.play(null).then(playing, function(err) {
+        _this.mopidy.playback.play(null).then(playing, function(err) {
           throw err;
         });
       };
@@ -180,7 +189,7 @@ MopidyController = (function(_super) {
         if (err) {
           return;
         }
-        return _this.db.getVotes([track], gotVotes);
+        _this.db.getVotes([track], gotVotes);
       };
     })(this);
     gotVotes = (function(_this) {
@@ -188,7 +197,7 @@ MopidyController = (function(_super) {
         if (err) {
           return;
         }
-        return _this.triggerTrackChanged(track);
+        _this.triggerTrackChanged(track);
       };
     })(this);
     this.db.voteTrack(track, addr, votedTrack);
@@ -202,7 +211,7 @@ MopidyController = (function(_super) {
         if (err) {
           return;
         }
-        return _this.db.getVotes([track], gotVotes);
+        _this.db.getVotes([track], gotVotes);
       };
     })(this);
     gotVotes = (function(_this) {
@@ -211,9 +220,9 @@ MopidyController = (function(_super) {
           return;
         }
         if (app.set('vote limit') >= track.votes) {
-          return _this.db.removeTrack(track, trackRemoved);
+          _this.db.removeTrack(track, trackRemoved);
         } else {
-          return _this.triggerTrackChanged(track);
+          _this.triggerTrackChanged(track);
         }
       };
     })(this);
@@ -222,7 +231,7 @@ MopidyController = (function(_super) {
         if (err) {
           throw err;
         }
-        return _this.queueUpdate();
+        _this.queueUpdate();
       };
     })(this);
     this.db.downvoteTrack(track, addr, downvoted);
@@ -254,11 +263,14 @@ MopidyController = (function(_super) {
               }
             }
           }
-          return _this.mopidy.tracklist.clear();
+          client = null;
+          _this.mopidy.tracklist.clear();
+          return;
         } else if (0 === _this.queue.length) {
-          return helpers.clear(_this.mopidy, function() {});
+          helpers.clear(_this.mopidy, function() {});
+          return;
         }
-        return helpers.setNextTrack(_this.mopidy, tracks[0], nextTrackSet);
+        helpers.setNextTrack(_this.mopidy, tracks[0], nextTrackSet);
       };
     })(this);
     nextTrackSet = (function(_this) {
@@ -267,7 +279,7 @@ MopidyController = (function(_super) {
           throw err;
         }
         if (done) {
-          return done();
+          done();
         }
       };
     })(this);
@@ -279,17 +291,20 @@ MopidyController = (function(_super) {
     var gotQueue;
     gotQueue = (function(_this) {
       return function(err, tracks) {
-        var client, _i, _len, _ref, _ref1, _results;
+        var client, _i, _len, _ref, _ref1;
         if (err) {
           return;
         }
         _ref = _this.clients;
-        _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           client = _ref[_i];
-          _results.push((_ref1 = client.queue) != null ? typeof _ref1.refresh === "function" ? _ref1.refresh(tracks) : void 0 : void 0);
+          if ((_ref1 = client.queue) != null) {
+            if (typeof _ref1.refresh === "function") {
+              _ref1.refresh(tracks);
+            }
+          }
         }
-        return _results;
+        client = null;
       };
     })(this);
     this.db.getQueue(this.app.set('queue max'), gotQueue);
@@ -307,7 +322,7 @@ MopidyController = (function(_super) {
           return;
         }
         track = tracks[0];
-        return _this.db.getVotes([track], gotVotes);
+        _this.db.getVotes([track], gotVotes);
       };
     })(this);
     gotVotes = (function(_this) {
@@ -319,7 +334,7 @@ MopidyController = (function(_super) {
           votes: track.votes,
           votesHash: track.votesHash
         };
-        return _this.db.resetTrack(track, trackReset);
+        _this.db.resetTrack(track, trackReset);
       };
     })(this);
     trackReset = (function(_this) {
@@ -329,7 +344,7 @@ MopidyController = (function(_super) {
         }
         _this.current.updated = track.updated;
         _this.queueUpdate();
-        return _this.setPlaying(track, 0);
+        _this.setPlaying(track, 0);
       };
     })(this);
     this.db.getTracks([track.uri], gotTracks);
@@ -352,6 +367,7 @@ MopidyController = (function(_super) {
         }
       }
     }
+    client = null;
     return this;
   };
 
@@ -376,9 +392,9 @@ MopidyController = (function(_super) {
         }
         s.track = track;
         if (app.set('vote limit') >= votes) {
-          return _this.db.removeTrack(track, trackRemoved);
+          _this.db.removeTrack(track, trackRemoved);
         } else {
-          return _this.db.setPooledVotes(track, votes, setVotes);
+          _this.db.setPooledVotes(track, votes, setVotes);
         }
       };
     })(this);
@@ -388,12 +404,12 @@ MopidyController = (function(_super) {
           throw err;
         }
         _this.current = null;
-        return _this.queueUpdate(queueUpdated);
+        _this.queueUpdate(queueUpdated);
       };
     })(this);
     queueUpdated = (function(_this) {
       return function() {
-        return _this.mopidy.playback.next().then(onNext, function(err) {
+        _this.mopidy.playback.next().then(onNext, function(err) {
           throw err;
         });
       };
@@ -405,14 +421,14 @@ MopidyController = (function(_super) {
           throw err;
         }
         _this.queueUpdate();
-        return _this.mopidy.playback.getTimePosition().then(gotTimePosition, function(err) {
+        _this.mopidy.playback.getTimePosition().then(gotTimePosition, function(err) {
           throw err;
         });
       };
     })(this);
     gotTimePosition = (function(_this) {
       return function(position) {
-        return _this.setPlaying(s.track, position);
+        _this.setPlaying(s.track, position);
       };
     })(this);
     this.mopidy.playback.getCurrentTrack().then(gotCurrentTrack, function(err) {
@@ -425,14 +441,17 @@ MopidyController = (function(_super) {
     var gotTimePosition;
     gotTimePosition = (function(_this) {
       return function(position) {
-        var client, _i, _len, _ref, _ref1, _results;
+        var client, _i, _len, _ref, _ref1;
         _ref = _this.clients;
-        _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           client = _ref[_i];
-          _results.push((_ref1 = client.state) != null ? typeof _ref1.change === "function" ? _ref1.change(state, position || 0) : void 0 : void 0);
+          if ((_ref1 = client.state) != null) {
+            if (typeof _ref1.change === "function") {
+              _ref1.change(state, position || 0);
+            }
+          }
         }
-        return _results;
+        client = null;
       };
     })(this);
     this.mopidy.playback.getTimePosition().then(gotTimePosition, function(err) {
@@ -460,7 +479,7 @@ MopidyController = (function(_super) {
         track.votesHash = _this.current.votesHash;
         track.updated = _this.current.updated;
         s.track = track;
-        return _this.mopidy.playback.getState().then(gotState, function(err) {
+        _this.mopidy.playback.getState().then(gotState, function(err) {
           return done(err);
         });
       };
@@ -468,14 +487,14 @@ MopidyController = (function(_super) {
     gotState = (function(_this) {
       return function(state) {
         s.state = 'playing' === state ? state : 'paused';
-        return _this.mopidy.playback.getTimePosition().then(gotPosition, function(err) {
+        _this.mopidy.playback.getTimePosition().then(gotPosition, function(err) {
           return done(err);
         });
       };
     })(this);
     gotPosition = (function(_this) {
       return function(position) {
-        return done(null, s.track, s.state, position);
+        done(null, s.track, s.state, position);
       };
     })(this);
     this.mopidy.playback.getCurrentTrack().then(gotCurrentTrack, function(err) {

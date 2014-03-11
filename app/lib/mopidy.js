@@ -3,7 +3,8 @@
 exports.cleanTrack = function(track) {
   delete track.votes;
   delete track.votesHash;
-  return delete track.updated;
+  delete track.updated;
+  return track;
 };
 
 exports.search = function(m, query, done) {
@@ -19,7 +20,8 @@ exports.search = function(m, query, done) {
       searchResults = results[_i];
       tracks.push.apply(tracks, searchResults.tracks);
     }
-    return done(null, tracks);
+    done(null, tracks);
+    results = tracks = null;
   };
   gotError = function(err) {
     return done(err);
@@ -28,33 +30,34 @@ exports.search = function(m, query, done) {
 };
 
 exports.onError = function(err) {
-  return console.error(err.stack);
+  console.error(err.stack);
 };
 
 exports.clear = function(m, done) {
   var gotCurrentTrack, gotIndex, gotPrevious, gotTracks, onError, onRemove, s;
-  onError = function(err) {
-    return done(err);
-  };
   s = {};
+  onError = function(err) {
+    done(err);
+    s = null;
+  };
   gotCurrentTrack = function(tlTrack) {
     if (tlTrack) {
-      return m.tracklist.index(tlTrack).then(gotIndex, onError);
+      m.tracklist.index(tlTrack).then(gotIndex, onError);
     } else {
-      return gotPrevious([]);
+      gotPrevious([]);
     }
   };
   gotIndex = function(index) {
     s.current = index;
     if (0 >= index) {
-      return gotPrevious([]);
+      gotPrevious([]);
     } else {
-      return m.tracklist.slice(0, index).then(gotPrevious, onError);
+      m.tracklist.slice(0, index).then(gotPrevious, onError);
     }
   };
   gotPrevious = function(tlTracks) {
     s.previous = tlTracks;
-    return m.tracklist.slice(s.current + 1, Infinity).then(gotTracks, onError);
+    m.tracklist.slice(s.current + 1, Infinity).then(gotTracks, onError);
   };
   gotTracks = function(tracks) {
     var ids, track;
@@ -69,9 +72,10 @@ exports.clear = function(m, done) {
       }
       return _results;
     })();
-    return m.tracklist.remove({
+    m.tracklist.remove({
       tlid: ids
     }).then(onRemove, onError);
+    s = ids = tracks = null;
   };
   onRemove = function() {
     return done();
@@ -89,7 +93,7 @@ exports.setNextTrack = function(m, track, done) {
     if (err) {
       return done(err);
     }
-    return m.tracklist.add([track], null).then(onAdd, onError);
+    m.tracklist.add([track], null).then(onAdd, onError);
   };
   onAdd = function() {
     return done();

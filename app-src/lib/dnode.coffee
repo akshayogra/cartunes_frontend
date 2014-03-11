@@ -13,41 +13,51 @@ module.exports = (app) ->
   return (remote, dnode) ->
     clients.push remote
 
-    dnode.once 'end', ->
-      index = clients.indexOf remote
-      clients.splice index, 1
-
     controller = app.set 'mopidy controller'
     addr = crypto.createHash 'sha1'
     addr.update dnode.stream.remoteAddress
     addr = addr.digest 'hex'
 
+    dnode.once 'end', ->
+      index = clients.indexOf remote
+      clients.splice index, 1
+      addr = controller = remote = dnode = null
+      return
+
     return {
       db         :
         search   : (query, done) ->
           helpers.search mopidy, query, done
+          return
 
       queue      :
         add      : (track) ->
           app.emit 'queue:add', track, addr
+          return
 
         downvote : (track) ->
           app.emit 'queue:downvote', track, addr
+          return
 
         get      : (done) ->
           db.getQueue app.set('queue max'), done
+          return
 
       current    :
         vote     : ->
           app.emit 'current:vote', addr
+          return
 
         downvote : ->
           app.emit 'current:downvote', addr
+          return
 
         get      : (done) ->
           controller.getPlaying done
+          return
 
       clients    :
         getId    : (done) ->
           done null, addr
+          return
     }

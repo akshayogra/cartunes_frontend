@@ -23,13 +23,23 @@ class MopidyController extends Emitter
     @checkPlaying()
 
   setupListeners: ->
-    @app.on 'queue:add', (track, addr) => @queueAdd track, addr
-    @app.on 'queue:downvote', (track, addr) => @queueDownvote track, addr
+    @app.on 'queue:add', (track, addr) =>
+      @queueAdd track, addr
+      return
+    @app.on 'queue:downvote', (track, addr) =>
+      @queueDownvote track, addr
+      return
 
-    @app.on 'current:vote', (clientId)     => @votePlaying clientId, 1
-    @app.on 'current:downvote', (clientId) => @votePlaying clientId, -1
+    @app.on 'current:vote', (clientId) =>
+      @votePlaying clientId, 1
+      return
+    @app.on 'current:downvote', (clientId) =>
+      @votePlaying clientId, -1
+      return
 
-    @mopidy.on 'event:trackPlaybackStarted', (track) => @trackChange track.tl_track.track
+    @mopidy.on 'event:trackPlaybackStarted', (track) =>
+      @trackChange track.tl_track.track
+      return
 
     @mopidy.on 'event:playbackStateChanged', (s) =>
       state = 'paused'
@@ -42,20 +52,27 @@ class MopidyController extends Emitter
           @queueUpdate()
 
       @stateChanged state
+      return
 
     @mopidy.on 'event:seeked', (position) =>
       for client in @clients
         client.state?.change? 'playing', position
+      client = null
+      return
 
     @queue.on 'add change', (track) =>
       track = track.toJSON()
       for client in @clients
         client.queue?.trackChanged? track
+      client = null
+      return
 
     @queue.on 'remove', (track) =>
       track = track.toJSON()
       for client in @clients
         client.queue?.trackRemoved? track
+      client = null
+      return
 
     this
 
@@ -63,6 +80,7 @@ class MopidyController extends Emitter
     gotState = (state) =>
       return if state == 'playing'
       @db.getQueue @app.set('queue max'), gotQueue
+      return
 
     gotQueue = (err, tracks) =>
       throw err if err
@@ -73,12 +91,14 @@ class MopidyController extends Emitter
       track = helpers.cleanTrack tracks[0]
 
       helpers.setNextTrack @mopidy, tracks[0], trackSet
+      return
 
     trackSet = (err) =>
       throw err if err
 
       @mopidy.playback.play(null)
         .then playing, (err) -> throw err
+      return
 
     playing = ->
 
@@ -93,12 +113,14 @@ class MopidyController extends Emitter
 
       # Attach votes to track
       @db.getVotes [track], gotVotes
+      return
 
     gotVotes = (err) =>
       return if err
 
       # Tell clients track has changed
       @triggerTrackChanged track
+      return
 
     @db.voteTrack track, addr, votedTrack
 
@@ -109,6 +131,7 @@ class MopidyController extends Emitter
       return if err
 
       @db.getVotes [track], gotVotes
+      return
 
     gotVotes = (err) =>
       return if err
@@ -117,10 +140,12 @@ class MopidyController extends Emitter
         @db.removeTrack track, trackRemoved
       else
         @triggerTrackChanged track
+      return
 
     trackRemoved = (err) =>
       throw err if err
       @queueUpdate()
+      return
 
     @db.downvoteTrack track, addr, downvoted
 
@@ -141,16 +166,21 @@ class MopidyController extends Emitter
       if 0 == @queue.length && !@current
         for client in @clients
           client.current?.set? null, 0
-        return @mopidy.tracklist.clear()
+        client = null
+        @mopidy.tracklist.clear()
+        return
       else if 0 == @queue.length
-        return helpers.clear @mopidy, ->
+        helpers.clear @mopidy, ->
+        return
 
       # Set next track
       helpers.setNextTrack @mopidy, tracks[0], nextTrackSet
+      return
 
     nextTrackSet = (err) =>
       throw err if err
       done() if done
+      return
 
     @db.getQueue @app.set('queue max'), gotQueue
 
@@ -162,6 +192,8 @@ class MopidyController extends Emitter
 
       for client in @clients
         client.queue?.refresh? tracks
+      client = null
+      return
 
     @db.getQueue @app.set('queue max'), gotQueue
 
@@ -175,6 +207,7 @@ class MopidyController extends Emitter
       track = tracks[0]
 
       @db.getVotes [track], gotVotes
+      return
 
     gotVotes = (err) =>
       throw err if err
@@ -185,6 +218,7 @@ class MopidyController extends Emitter
         votesHash : track.votesHash
 
       @db.resetTrack track, trackReset
+      return
 
     trackReset = (err) =>
       throw err if err
@@ -193,6 +227,7 @@ class MopidyController extends Emitter
 
       @queueUpdate()
       @setPlaying track, 0
+      return
 
     @db.getTracks [track.uri], gotTracks
 
@@ -204,6 +239,7 @@ class MopidyController extends Emitter
 
     for client in @clients
       client.current?.set? track, position
+    client = null
 
     this
 
@@ -227,15 +263,18 @@ class MopidyController extends Emitter
         @db.removeTrack track, trackRemoved
       else
         @db.setPooledVotes track, votes, setVotes
+      return
 
     trackRemoved = (err) =>
       throw err if err
       @current = null
       @queueUpdate queueUpdated
+      return
 
     queueUpdated = =>
       @mopidy.playback.next()
         .then onNext, (err) -> throw err
+      return
     onNext = ->
 
     setVotes = (err) =>
@@ -246,9 +285,11 @@ class MopidyController extends Emitter
 
       @mopidy.playback.getTimePosition()
         .then gotTimePosition, (err) -> throw err
+      return
 
     gotTimePosition = (position) =>
       @setPlaying s.track, position
+      return
 
     @mopidy.playback.getCurrentTrack()
       .then gotCurrentTrack, (err) -> throw err
@@ -259,6 +300,8 @@ class MopidyController extends Emitter
     gotTimePosition = (position) =>
       for client in @clients
         client.state?.change? state, position || 0
+      client = null
+      return
 
     @mopidy.playback.getTimePosition()
       .then gotTimePosition, (err) -> throw err
@@ -285,15 +328,18 @@ class MopidyController extends Emitter
 
       @mopidy.playback.getState()
         .then gotState, (err) -> done err
+      return
 
     gotState = (state) =>
       s.state = if 'playing' == state then state else 'paused'
 
       @mopidy.playback.getTimePosition()
         .then gotPosition, (err) -> done err
+      return
 
     gotPosition = (position) =>
       done null, s.track, s.state, position
+      return
 
     @mopidy.playback.getCurrentTrack()
       .then gotCurrentTrack, (err) -> done err
