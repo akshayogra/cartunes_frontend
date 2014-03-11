@@ -950,6 +950,9 @@ input.search-input {
   input.search-input:-ms-input-placeholder {
     color: #000;
   }
+  input.search-input {
+    padding: 0em 3.75em 0em 1.125em;
+  }
   .search-wrap .search-button {
     font-size: 1.375em;
     height: 2.727272727272727em;
