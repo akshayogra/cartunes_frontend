@@ -731,6 +731,10 @@ input.input {
   font-size: 1em;
   line-height: 1.5em;
 }
+:focus {
+  outline-color: transparent;
+  outline-style: none;
+}
 .search-wrap {
   background-color: #ff0;
   overflow: hidden;
