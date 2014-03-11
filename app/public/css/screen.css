@@ -884,6 +884,11 @@ input.search-input {
   background-color: #fef200;
   display: block;
   height: 100%;
+  -webkit-transition: 1s width linear;
+  -moz-transition: 1s width linear;
+  -o-transition: 1s width linear;
+  -ms-transition: 1s width linear;
+  transition: 1s width linear;
   width: 0;
 }
 .current-track {
@@ -972,7 +977,7 @@ input.search-input {
     width: 3.75em;
   }
   .track-name {
-    margin: 0.5249999999999999em 0em 0em;
+    margin: 0.6000000000000001em 0em 0em;
     padding: 0em 4.5em;
   }
   .track-artist {
@@ -996,24 +1001,24 @@ input.search-input {
     line-height: 2.9454545454545458em;
   }
   .current-track {
-    height: 4.5em;
+    height: 3.75em;
   }
   .current-track .track-cover {
-    height: 4.5em;
-    width: 4.5em;
+    height: 3.75em;
+    width: 3.75em;
   }
   .track-info {
     padding: 0.375em 9.375em 0em 5.25em;
   }
   .current-buttons button {
     font-size: 1.375em;
-    height: 3.272727272727273em;
-    width: 3.272727272727273em;
+    height: 2.727272727272727em;
+    width: 2.727272727272727em;
     cursor: pointer;
-    line-height: 3.4909090909090916em;
+    line-height: 3em;
   }
   .current-buttons {
-    line-height: 4.5em;
+    line-height: 3.75em;
   }
   .current-buttons .button {
     cursor: pointer;

@@ -31,8 +31,9 @@ class CurrentController extends AppController
       @init()
 
     @view.on 'queue:cover', =>
-      @coverQ.push track : @current, (err, cover) =>
-        return if err or !cover
+      track = @current
+      @coverQ.push track : track, (err, cover) =>
+        return if err or !cover or track != @current
         @view.setCover cover
 
     @view.on 'click:vote', =>
