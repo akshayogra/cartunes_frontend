@@ -1,4 +1,21 @@
 @media (min-width: 700px)
+  input.search-input::-webkit-input-placeholder
+    color: black
+  input.search-input:-moz-placeholder
+    color: black
+  input.search-input::-moz-placeholder
+    color: black
+  input.search-input:-ms-input-placeholder
+    color: black
+
+  .search-wrap
+    .search-button
+      grid-font-size(large-size)
+      height: grid-line-em(2.5, large-size)
+      width: grid-line-em(2.5, large-size)
+      cursor: pointer
+      line-height: grid-line-em(2.75, large-size)
+
   .panel-labels > li
     display: block
     float: left
@@ -8,3 +25,62 @@
     display: block
     float: left
     width: 50%
+    grid-line-padding(4 0 3.25)
+
+  .tracklist li 
+    height: grid-line-em(2.5)
+    overflow: hidden
+
+  .track-cover
+    height: grid-line-em(2.5)
+    width: grid-line-em(2.5)
+
+  .track-name
+    grid-line-margin(0.35 0 0)
+    grid-line-padding(0 3)
+
+  .track-artist
+    grid-line-padding(0 3, small-size)
+
+  .panel-queue .track-name
+    grid-line-padding(0 6.25 0 3)
+
+  .panel-queue .track-artist
+    grid-line-padding(0 6.25 0 3, small-size)
+
+  .tracklist-buttons
+    line-height: 4em
+    height: 4em
+
+  .tracklist-buttons button
+    grid-font-size(large-size)
+    height: grid-line-em(2.5, large-size)
+    width: grid-line-em(2.5, large-size)
+    cursor: pointer
+    line-height: grid-line-em(2.7, large-size)
+
+  .current-track
+    height: grid-line-em(3)
+
+    .track-cover
+      height: grid-line-em(3)
+      width: grid-line-em(3)
+
+  .track-info
+    grid-line-padding(0.25 6.25 0 3.5)
+
+  .current-buttons button
+    grid-font-size(large-size)
+    height: grid-line-em(3, large-size)
+    width: grid-line-em(3, large-size)
+    cursor: pointer
+    line-height: grid-line-em(3.2, large-size)
+
+  .current-buttons
+    line-height: grid-line-em(3)
+
+  .current-buttons .button
+    cursor: pointer
+
+  .panel-labels .icon
+    grid-line-margin(0 0.2 0)

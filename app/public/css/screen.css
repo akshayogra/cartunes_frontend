@@ -722,6 +722,8 @@ body {
 .button {
   background: none;
   border: 0;
+  padding: 0;
+  margin: 0;
 }
 input.input {
   background-color: transparent;
@@ -931,6 +933,25 @@ input.search-input {
   color: #fff;
 }
 @media (min-width: 700px) {
+  input.search-input::-webkit-input-placeholder {
+    color: #000;
+  }
+  input.search-input:-moz-placeholder {
+    color: #000;
+  }
+  input.search-input::-moz-placeholder {
+    color: #000;
+  }
+  input.search-input:-ms-input-placeholder {
+    color: #000;
+  }
+  .search-wrap .search-button {
+    font-size: 1.375em;
+    height: 2.727272727272727em;
+    width: 2.727272727272727em;
+    cursor: pointer;
+    line-height: 3em;
+  }
   .panel-labels > li {
     display: block;
     float: left;
@@ -940,5 +961,64 @@ input.search-input {
     display: block;
     float: left;
     width: 50%;
+    padding: 6em 0em 4.875em;
+  }
+  .tracklist li {
+    height: 3.75em;
+    overflow: hidden;
+  }
+  .track-cover {
+    height: 3.75em;
+    width: 3.75em;
+  }
+  .track-name {
+    margin: 0.5249999999999999em 0em 0em;
+    padding: 0em 4.5em;
+  }
+  .track-artist {
+    padding: 0em 5.538461538461538em;
+  }
+  .panel-queue .track-name {
+    padding: 0em 9.375em 0em 4.5em;
+  }
+  .panel-queue .track-artist {
+    padding: 0em 11.538461538461538em 0em 5.538461538461538em;
+  }
+  .tracklist-buttons {
+    line-height: 4em;
+    height: 4em;
+  }
+  .tracklist-buttons button {
+    font-size: 1.375em;
+    height: 2.727272727272727em;
+    width: 2.727272727272727em;
+    cursor: pointer;
+    line-height: 2.9454545454545458em;
+  }
+  .current-track {
+    height: 4.5em;
+  }
+  .current-track .track-cover {
+    height: 4.5em;
+    width: 4.5em;
+  }
+  .track-info {
+    padding: 0.375em 9.375em 0em 5.25em;
+  }
+  .current-buttons button {
+    font-size: 1.375em;
+    height: 3.272727272727273em;
+    width: 3.272727272727273em;
+    cursor: pointer;
+    line-height: 3.4909090909090916em;
+  }
+  .current-buttons {
+    line-height: 4.5em;
+  }
+  .current-buttons .button {
+    cursor: pointer;
+  }
+  .panel-labels .icon {
+    margin: 0em 0.30000000000000004em 0em;
   }
 }
