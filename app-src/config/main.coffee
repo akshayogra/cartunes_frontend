@@ -13,12 +13,7 @@ module.exports = (app) ->
     mpath.resolve mpath.join __dirname, '../public'
   )
 
-  app.use express.logger()
-  app.use express.json()
-  app.use express.urlencoded()
-
   app.set 'view engine', 'jade'
-
+  app.use express.logger()
   app.use express.compress()
-
   app.use express.static(app.set 'public')
