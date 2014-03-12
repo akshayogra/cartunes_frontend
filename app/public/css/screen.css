@@ -954,9 +954,6 @@ input.search-input {
   input.search-input:-ms-input-placeholder {
     color: #000;
   }
-  input.search-input {
-    padding: 0em 3.75em 0em 1.125em;
-  }
   .search-wrap .search-button {
     font-size: 1.375em;
     height: 2.727272727272727em;
@@ -973,7 +970,7 @@ input.search-input {
     display: block;
     float: left;
     width: 50%;
-    padding: 6em 0em 4.875em;
+    padding: 6em 0em 4.125em;
   }
   .tracklist li {
     height: 3.75em;
@@ -1000,8 +997,8 @@ input.search-input {
     padding: 0em 11.538461538461538em 0em 5.538461538461538em;
   }
   .tracklist-buttons {
-    line-height: 4em;
-    height: 4em;
+    line-height: 3.75em;
+    height: 3.75em;
   }
   .tracklist-buttons button {
     font-size: 1.375em;
