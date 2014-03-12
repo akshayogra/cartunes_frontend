@@ -30,7 +30,7 @@ class CurrentController extends AppController
       @setCurrent @current, position
 
     @app.on 'state:playing', (position) =>
-      @init()
+      @setPlaying position
 
     @view.on 'queue:cover', =>
       track = @current
@@ -55,12 +55,21 @@ class CurrentController extends AppController
       @setCurrent track, position
 
       if 'playing' == state && !@interval
-        @interval = setInterval(
-          => @updatePosition()
-          1000
-        )
+        @setPlaying()
 
     @dnode().current.get gotCurrentTrack
+
+    this
+
+  setPlaying: (position) ->
+    if 'number' == typeof position
+      @updatePosition position
+
+    if !@interval
+      @interval = setInterval(
+        => @updatePosition()
+        1000
+      )
 
     this
 
