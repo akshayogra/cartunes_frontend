@@ -58,6 +58,8 @@ class CurrentController extends AppController
           1000
         )
 
+      window.location.reload()
+
     @dnode().current.get gotCurrentTrack
 
     this

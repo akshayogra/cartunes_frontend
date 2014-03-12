@@ -38,6 +38,7 @@
     "grunt-contrib-uglify": "^0.4.0",
     "nib": "^1.0.2",
     "grunt-contrib-stylus": "^0.13.2",
-    "jadeify": "^2.1.1"
+    "jadeify": "^2.1.1",
+    "grunt-contrib-jade": "^0.11.0"
   }
 }
