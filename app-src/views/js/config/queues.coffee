@@ -7,7 +7,7 @@ onCoverQueue = (job, done) ->
     ->
       timeout = null
       done()
-    1500
+    2500
   )
 
   gotCover = (err, cover) ->
