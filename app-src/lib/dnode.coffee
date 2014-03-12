@@ -11,6 +11,7 @@ module.exports = (app) ->
   app.set 'dnode clients', clients
 
   return (remote, dnode) ->
+    return dnode.end() unless dnode.stream && dnode.stream.remoteAddress
     clients.push remote
 
     controller = app.set 'mopidy controller'

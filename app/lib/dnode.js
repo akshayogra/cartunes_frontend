@@ -14,6 +14,9 @@ module.exports = function(app) {
   app.set('dnode clients', clients);
   return function(remote, dnode) {
     var addr, controller;
+    if (!(dnode.stream && dnode.stream.remoteAddress)) {
+      return dnode.end();
+    }
     clients.push(remote);
     controller = app.set('mopidy controller');
     addr = crypto.createHash('sha1');
