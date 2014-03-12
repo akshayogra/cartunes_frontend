@@ -12,5 +12,6 @@ module.exports = function(app) {
   app.set('mopidy ws', config.mopidyWebsocket);
   app.set('javascript extension', config.javascriptExtension);
   app.set('queue max', config.maxQueueSize);
-  return app.set('vote limit', config.voteLimit);
+  app.set('vote limit', config.voteLimit);
+  return app.set('gzip compression', !!config.compress);
 };

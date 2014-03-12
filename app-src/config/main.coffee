@@ -10,5 +10,6 @@ module.exports = (app) ->
   )
 
   app.use express.logger()
-  app.use express.compress()
+  if app.set 'gzip compression'
+    app.use express.compress()
   app.use express.static(app.set 'public')

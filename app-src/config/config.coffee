@@ -14,3 +14,5 @@ module.exports = (app) ->
 
   app.set 'queue max', config.maxQueueSize
   app.set 'vote limit', config.voteLimit
+
+  app.set 'gzip compression', !!config.compress
