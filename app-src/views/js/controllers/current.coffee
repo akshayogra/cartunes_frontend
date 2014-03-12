@@ -20,9 +20,11 @@ class CurrentController extends AppController
       track = new Track track
       @setCurrent track, position
 
-    @app.on 'state:paused', (position) =>
-      return @clearCurrent() unless @current
+    @app.on 'state:stopped', =>
+      clearInterval @interval if @interval
+      @interval = null
 
+    @app.on 'state:paused', (position) =>
       clearInterval @interval if @interval
       @interval = null
       @setCurrent @current, position
