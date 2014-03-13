@@ -42,13 +42,13 @@ class MopidyController extends Emitter
       return
 
     @mopidy.on 'event:playbackStateChanged', (state) =>
-      if 'stopped' == s.new_state
+      if 'stopped' == state.new_state
         @current = null
 
         if 0 == @queue.length
           @queueUpdate()
 
-      @stateChanged state
+      @stateChanged state.new_state
       return
 
     @mopidy.on 'event:seeked', (position) =>

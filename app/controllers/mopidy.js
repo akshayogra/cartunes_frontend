@@ -78,13 +78,13 @@ MopidyController = (function(_super) {
     })(this));
     this.mopidy.on('event:playbackStateChanged', (function(_this) {
       return function(state) {
-        if ('stopped' === s.new_state) {
+        if ('stopped' === state.new_state) {
           _this.current = null;
           if (0 === _this.queue.length) {
             _this.queueUpdate();
           }
         }
-        _this.stateChanged(state);
+        _this.stateChanged(state.new_state);
       };
     })(this));
     this.mopidy.on('event:seeked', (function(_this) {
