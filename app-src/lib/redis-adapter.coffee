@@ -122,7 +122,6 @@ class RedisAdapter
       @redis
         .multi()
         .hset @key('tracks'), track.uri, JSON.stringify track
-        .hset @key('previous'), track.uri, votes
         .del @key('votes', track.uri)
         .srem @key('voted'), track.uri
         .zadd @key('pool'), votes, track.uri
@@ -139,7 +138,6 @@ class RedisAdapter
   setPooledVotes: (track, votes, done) ->
     @redis
       .multi()
-      .hset @key('previous'), track.uri, votes
       .zadd @key('pool'), +votes, track.uri
       .exec (err) -> done err
 
@@ -152,7 +150,6 @@ class RedisAdapter
       .multi()
       .hdel @key('tracks'), track.uri
       .del @key('votes', track.uri)
-      .hdel @key('previous'), track.uri
       .srem @key('voted'), track.uri
       .zrem @key('pool'), track.uri
       .exec onExec
