@@ -725,6 +725,9 @@ body {
   padding: 0;
   margin: 0;
 }
+.button .icon {
+  line-height: inherit;
+}
 input.input {
   background-color: transparent;
   border: none;
@@ -756,8 +759,7 @@ input.search-input {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   height: 3.75em;
-  line-height: 3.75em;
-  padding: 0em 3.75em 0em 1.5em;
+  padding: 1.125em 3.75em 1.125em 1.5em;
   width: 100%;
 }
 .panel-labels {
@@ -959,7 +961,7 @@ input.search-input {
     height: 2.727272727272727em;
     width: 2.727272727272727em;
     cursor: pointer;
-    line-height: 3em;
+    line-height: 2.727272727272727em;
   }
   .panel-labels > li {
     display: block;
@@ -1005,7 +1007,7 @@ input.search-input {
     height: 2.727272727272727em;
     width: 2.727272727272727em;
     cursor: pointer;
-    line-height: 2.9454545454545458em;
+    line-height: 2.727272727272727em;
   }
   .current-track {
     height: 3.75em;
@@ -1022,7 +1024,7 @@ input.search-input {
     height: 2.727272727272727em;
     width: 2.727272727272727em;
     cursor: pointer;
-    line-height: 3em;
+    line-height: 2.727272727272727em;
   }
   .current-buttons {
     line-height: 3.75em;
