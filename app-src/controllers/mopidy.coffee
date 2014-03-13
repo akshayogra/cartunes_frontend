@@ -41,17 +41,14 @@ class MopidyController extends Emitter
       @trackChange track.tl_track.track
       return
 
-    @mopidy.on 'event:playbackStateChanged', (s) =>
-      state = 'paused'
-      if 'playing' == s.new_state
-        state = 'playing'
-      else if 'stopped' == s.new_state
+    @mopidy.on 'event:playbackStateChanged', (state) =>
+      if 'stopped' == state.new_state
         @current = null
 
         if 0 == @queue.length
           @queueUpdate()
 
-      @stateChanged state
+      @stateChanged state.new_state
       return
 
     @mopidy.on 'event:seeked', (position) =>
@@ -302,6 +299,10 @@ class MopidyController extends Emitter
         client.state?.change? state, position || 0
       client = null
       return
+
+    if 'stopped' == state
+      gotTimePosition 0
+      return this
 
     @mopidy.playback.getTimePosition()
       .then gotTimePosition, (err) -> throw err

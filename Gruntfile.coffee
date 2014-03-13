@@ -37,6 +37,13 @@ module.exports = (grunt) ->
         options     :
           compress  : yes
           use       : [require('nib')]
+    jade            :
+      default       :
+        files       : { 'app/public/index.html' : 'app-src/views/home/index.jade' }
+        options     :
+          data      : (dest, src) ->
+            return require './config.json'
+          debug     : no
     watch           :
       views         :
         files       : ['app-src/views/js/**/*.coffee', 'app-src/views/js/**/*.jade']
@@ -44,6 +51,9 @@ module.exports = (grunt) ->
       stylus        :
         files       : ['app-src/views/styl/**/*.styl']
         tasks       : ['stylus']
+      jade          :
+        files       : ['app-src/views/**/*.jade']
+        tasks       : ['jade']
 
   grunt.loadNpmTasks 'grunt-concurrent'
   grunt.loadNpmTasks 'grunt-nodemon'
@@ -51,7 +61,8 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-browserify'
   grunt.loadNpmTasks 'grunt-contrib-stylus'
+  grunt.loadNpmTasks 'grunt-contrib-jade'
 
   grunt.registerTask 'javascript', ['browserify', 'uglify']
   grunt.registerTask 'start-dev-server', ['default', 'concurrent:dev']
-  grunt.registerTask 'default', ['javascript', 'stylus']
+  grunt.registerTask 'default', ['javascript', 'stylus', 'jade']

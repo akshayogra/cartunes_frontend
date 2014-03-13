@@ -115,17 +115,18 @@ RedisAdapter = (function() {
   RedisAdapter.prototype.resetTrack = function(track, done) {
     var gotVotes, onExec;
     gotVotes = (function(_this) {
-      return function(err, votes) {
+      return function(err) {
+        var votes;
         if (err) {
           return done(err);
         }
-        if (!(votes && votes[0])) {
+        if ('number' !== typeof track.votes) {
           return done();
         }
-        votes = votes[0];
+        votes = track.votes;
         helpers.cleanTrack(track);
         track.updated = Date.now();
-        _this.redis.multi().hset(_this.key('tracks'), track.uri, JSON.stringify(track)).hset(_this.key('previous'), track.uri, votes).del(_this.key('votes', track.uri)).zadd(_this.key('pool'), track.uri, votes).exec(onExec);
+        _this.redis.multi().hset(_this.key('tracks'), track.uri, JSON.stringify(track)).del(_this.key('votes', track.uri)).srem(_this.key('voted'), track.uri).zadd(_this.key('pool'), votes, track.uri).exec(onExec);
         track = null;
       };
     })(this);
@@ -137,7 +138,7 @@ RedisAdapter = (function() {
   };
 
   RedisAdapter.prototype.setPooledVotes = function(track, votes, done) {
-    this.redis.multi().hset(this.key('previous'), track.uri, votes).zadd(this.key('pool'), track.uri, votes).exec(function(err) {
+    this.redis.multi().zadd(this.key('pool'), +votes, track.uri).exec(function(err) {
       return done(err);
     });
     return this;
@@ -148,7 +149,7 @@ RedisAdapter = (function() {
     onExec = function(err) {
       return done(err);
     };
-    this.redis.multi().hdel(this.key('tracks'), track.uri).del(this.key('votes', track.uri)).hdel(this.key('previous'), track.uri).srem(this.key('voted'), track.uri).zrem(this.key('pool'), track.uri).exec(onExec);
+    this.redis.multi().hdel(this.key('tracks'), track.uri).del(this.key('votes', track.uri)).srem(this.key('voted'), track.uri).zrem(this.key('pool'), track.uri).exec(onExec);
     return this;
   };
 
