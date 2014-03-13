@@ -165,7 +165,7 @@ RedisAdapter = (function() {
         }
         s.uris = uris;
         if (length > uris.length) {
-          return _this.redis.zrevrange(_this.key('pool'), 0, length - uris.length, gotPool);
+          return _this.redis.zrevrange(_this.key('pool'), 0, length - uris.length - 1, gotPool);
         } else {
           return gotPool(null, []);
         }

@@ -176,7 +176,7 @@ class RedisAdapter
       s.uris = uris
 
       if length > uris.length
-        @redis.zrevrange @key('pool'), 0, length - uris.length, gotPool
+        @redis.zrevrange @key('pool'), 0, length - uris.length - 1, gotPool
       else
         gotPool null, []
 
