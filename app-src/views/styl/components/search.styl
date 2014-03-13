@@ -14,9 +14,17 @@
     top: 0
     width: grid-line-em(2.5)
 
+input.search-input::-webkit-input-placeholder
+  color: black
+input.search-input:-moz-placeholder
+  color: black
+input.search-input::-moz-placeholder
+  color: black
+input.search-input:-ms-input-placeholder
+  color: black
+
 input.search-input
   box-sizing: border-box
   height: grid-line-em(2.5)
-  line-height: grid-line-em(2.5)
-  grid-line-padding(0 2.5 0 1)
+  grid-line-padding(0.75 2.5 0.75 1)
   width: 100%

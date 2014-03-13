@@ -3,12 +3,12 @@ html
   head
     title Dplyr - Musical Democracy
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    link(rel="stylesheet", href="/css/screen.css")
-    script(type="text/javascript", src="/js/dist" + javascriptExtension)
+    link(rel="stylesheet", href="/css/screen.min.css")
     block scripts
 
   body
     block content
 
+    script(type="text/javascript", src="/js/dist" + javascriptExtension)
     script(type="text/javascript").
       require('page').emit('ready')

@@ -25,7 +25,7 @@ class Track extends bb.Model
       album  : @get('album').name
     , success : (data) ->
         for image in data.album.image
-          if 'medium' == image.size
+          if 'large' == image.size
             Track.COVER_CACHE[key] = image['#text']
             return done null, image['#text']
         done()
