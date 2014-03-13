@@ -77,12 +77,8 @@ MopidyController = (function(_super) {
       };
     })(this));
     this.mopidy.on('event:playbackStateChanged', (function(_this) {
-      return function(s) {
-        var state;
-        state = 'paused';
-        if ('playing' === s.new_state) {
-          state = 'playing';
-        } else if ('stopped' === s.new_state) {
+      return function(state) {
+        if ('stopped' === s.new_state) {
           _this.current = null;
           if (0 === _this.queue.length) {
             _this.queueUpdate();
@@ -454,6 +450,10 @@ MopidyController = (function(_super) {
         client = null;
       };
     })(this);
+    if ('stopped' === state) {
+      gotTimePosition(0);
+      return this;
+    }
     this.mopidy.playback.getTimePosition().then(gotTimePosition, function(err) {
       throw err;
     });

@@ -294,15 +294,15 @@ class MopidyController extends Emitter
     this
 
   stateChanged: (state) ->
-    if 'stopped' == state
-      gotTimePosition 0
-      return this
-
     gotTimePosition = (position) =>
       for client in @clients
         client.state?.change? state, position || 0
       client = null
       return
+
+    if 'stopped' == state
+      gotTimePosition 0
+      return this
 
     @mopidy.playback.getTimePosition()
       .then gotTimePosition, (err) -> throw err

@@ -124,7 +124,8 @@ class RedisAdapter
         .hset @key('tracks'), track.uri, JSON.stringify track
         .hset @key('previous'), track.uri, votes
         .del @key('votes', track.uri)
-        .zadd @key('pool'), track.uri, votes
+        .srem @key('voted'), track.uri
+        .zadd @key('pool'), +votes, track.uri
         .exec onExec
       track = null
       return
@@ -139,7 +140,7 @@ class RedisAdapter
     @redis
       .multi()
       .hset @key('previous'), track.uri, votes
-      .zadd @key('pool'), track.uri, votes
+      .zadd @key('pool'), +votes, track.uri
       .exec (err) -> done err
 
     this
