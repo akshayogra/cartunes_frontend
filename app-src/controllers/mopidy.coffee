@@ -213,6 +213,7 @@ class MopidyController extends Emitter
       @current    =
         votes     : track.votes
         votesHash : track.votesHash
+        previous  : track.previous
 
       @db.resetTrack track, trackReset
       return
@@ -233,6 +234,7 @@ class MopidyController extends Emitter
   setPlaying: (track, position = 0) ->
     track.votes     = @current.votes
     track.votesHash = @current.votesHash
+    track.previous  = @current.previous
 
     for client in @clients
       client.current?.set? track, position
@@ -319,10 +321,12 @@ class MopidyController extends Emitter
         @current    =
           votes     : 0
           votesHash : {}
+          previous  : 0
           updated   : Date.now()
 
       track.votes     = @current.votes
       track.votesHash = @current.votesHash
+      track.previous  = @current.previous
       track.updated   = @current.updated
 
       s.track = track

@@ -4,6 +4,7 @@ exports.cleanTrack = (track) ->
   delete track.votes
   delete track.votesHash
   delete track.updated
+  delete track.previous
   return track
 
 exports.search = (m, query, done) ->

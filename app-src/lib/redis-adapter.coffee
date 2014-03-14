@@ -49,8 +49,10 @@ class RedisAdapter
       done err
       return
 
+    previous = track.previous
     helpers.cleanTrack track
     track.updated = Date.now()
+    track.previous = previous || 0
     @redis
       .multi()
       .hset @key('tracks'), track.uri, JSON.stringify track
@@ -66,8 +68,10 @@ class RedisAdapter
       done err
       return
 
+    previous = track.previous
     helpers.cleanTrack track
     track.updated = Date.now()
+    track.previous = previous
     @redis
       .multi()
       .hset @key('tracks'), track.uri, JSON.stringify track
@@ -114,17 +118,23 @@ class RedisAdapter
       return done err if err
       return done() unless 'number' == typeof track.votes
 
-      votes = track.votes
+      votesHash = track.votesHash
+      votes     = track.votes
+      previous  = track.previous
 
       helpers.cleanTrack track
       track.updated = Date.now()
+
+      track.previous = previous || 0
+      if votesHash && 0 < Object.keys(votesHash).length
+        track.previous = votes
 
       @redis
         .multi()
         .hset @key('tracks'), track.uri, JSON.stringify track
         .del @key('votes', track.uri)
         .srem @key('voted'), track.uri
-        .zadd @key('pool'), votes, track.uri
+        .zadd @key('pool'), track.previous, track.uri
         .exec onExec
       track = null
       return
@@ -136,10 +146,19 @@ class RedisAdapter
     this
 
   setPooledVotes: (track, votes, done) ->
-    @redis
-      .multi()
-      .zadd @key('pool'), +votes, track.uri
-      .exec (err) -> done err
+    gotTracks = (err, tracks) =>
+      return done err if err
+
+      track = tracks[0]
+      track.previous = votes
+
+      @redis
+        .multi()
+        .hset @key('tracks'), track.uri, JSON.stringify track
+        .zadd @key('pool'), +votes, track.uri
+        .exec (err) -> done err
+
+    @getTracks [track.uri], gotTracks
 
     this
 
@@ -176,14 +195,18 @@ class RedisAdapter
       s.uris = uris
 
       if length > uris.length
-        @redis.zrevrange @key('pool'), 0, length - uris.length - 1, gotPool
+        @redis.zrevrange @key('pool'), 0, length - uris.length - 1, 'WITHSCORES', gotPool
       else
         gotPool null, []
 
     gotPool = (err, poolUris) =>
       return done err if err
 
-      s.uris.push poolUris...
+      s.votes = {}
+
+      for uri, index in poolUris by 2
+        s.votes[uri] = poolUris[index + 1]
+        s.uris.push uri
 
       @getTracks s.uris, gotTracks
       return
