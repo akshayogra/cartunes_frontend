@@ -4,6 +4,7 @@ exports.cleanTrack = function(track) {
   delete track.votes;
   delete track.votesHash;
   delete track.updated;
+  delete track.previous;
   return track;
 };
 

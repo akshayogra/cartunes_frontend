@@ -328,7 +328,8 @@ MopidyController = (function(_super) {
         }
         _this.current = {
           votes: track.votes,
-          votesHash: track.votesHash
+          votesHash: track.votesHash,
+          previous: track.previous
         };
         _this.db.resetTrack(track, trackReset);
       };
@@ -354,6 +355,7 @@ MopidyController = (function(_super) {
     }
     track.votes = this.current.votes;
     track.votesHash = this.current.votesHash;
+    track.previous = this.current.previous;
     _ref = this.clients;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       client = _ref[_i];
@@ -472,11 +474,13 @@ MopidyController = (function(_super) {
           _this.current = {
             votes: 0,
             votesHash: {},
+            previous: 0,
             updated: Date.now()
           };
         }
         track.votes = _this.current.votes;
         track.votesHash = _this.current.votesHash;
+        track.previous = _this.current.previous;
         track.updated = _this.current.updated;
         s.track = track;
         _this.mopidy.playback.getState().then(gotState, function(err) {
