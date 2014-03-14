@@ -150,6 +150,7 @@ class RedisAdapter
       return done err if err
 
       track = tracks[0]
+      return done() unless track
       track.previous = votes
 
       @redis

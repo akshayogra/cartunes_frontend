@@ -155,6 +155,9 @@ RedisAdapter = (function() {
           return done(err);
         }
         track = tracks[0];
+        if (!track) {
+          return done();
+        }
         track.previous = votes;
         return _this.redis.multi().hset(_this.key('tracks'), track.uri, JSON.stringify(track)).zadd(_this.key('pool'), +votes, track.uri).exec(function(err) {
           return done(err);
