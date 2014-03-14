@@ -8,13 +8,14 @@ Musical democracy for Design Works. A frontend for the mopidy HTTP server.
 Requires knowledge of the Mac OSX / *nix command line
 
 1. Install node: http://nodejs.org/
-2. Download / `git clone` this repository
-3. Copy and edit the sample config
+2. Install and start a redis server: http://redis.io/
+3. Download / `git clone` this repository
+4. Copy and edit the sample config
 
         $ cp config.sample.json config.json
 
-4. Start `mopidy` server with HTTP support
-5. Install dependencies and run:
+5. Start `mopidy` server with HTTP support
+6. Install dependencies and run:
 
         $ npm install
         $ node server.js
