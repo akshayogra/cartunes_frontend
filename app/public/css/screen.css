@@ -771,7 +771,7 @@ input.search-input {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   height: 3.75em;
-  padding: 1.125em 3.75em 1.125em 1.5em;
+  padding: 1.125em 3.75em 1.125em 1.125em;
   width: 100%;
 }
 .panel-labels {
