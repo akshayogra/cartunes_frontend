@@ -136,7 +136,7 @@ RedisAdapter = (function() {
         if (votesHash && 0 < Object.keys(votesHash).length) {
           track.previous = votes;
         }
-        _this.redis.multi().hset(_this.key('tracks'), track.uri, JSON.stringify(track)).del(_this.key('votes', track.uri)).srem(_this.key('voted'), track.uri).zadd(_this.key('pool'), track.previous, track.uri).exec(onExec);
+        _this.redis.multi().hset(_this.key('tracks'), track.uri, JSON.stringify(track)).del(_this.key('votes', track.uri)).srem(_this.key('voted'), track.uri).zadd(_this.key('pool'), "" + track.previous, track.uri).exec(onExec);
         track = null;
       };
     })(this);
@@ -189,7 +189,7 @@ RedisAdapter = (function() {
         }
         s.uris = uris;
         if (length > uris.length) {
-          return _this.redis.zrevrange(_this.key('pool'), 0, length - uris.length - 1, 'WITHSCORES', gotPool);
+          return _this.redis.zrevrange(_this.key('pool'), 0, -1, 'WITHSCORES', gotPool);
         } else {
           return gotPool(null, []);
         }
@@ -238,7 +238,7 @@ RedisAdapter = (function() {
           }
           return b.votes - a.votes;
         });
-        done(null, s.tracks);
+        done(null, s.tracks.slice(0, length));
         s = null;
       };
     })(this);

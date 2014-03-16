@@ -134,7 +134,7 @@ class RedisAdapter
         .hset @key('tracks'), track.uri, JSON.stringify track
         .del @key('votes', track.uri)
         .srem @key('voted'), track.uri
-        .zadd @key('pool'), track.previous, track.uri
+        .zadd @key('pool'), "#{track.previous}", track.uri
         .exec onExec
       track = null
       return
@@ -196,7 +196,7 @@ class RedisAdapter
       s.uris = uris
 
       if length > uris.length
-        @redis.zrevrange @key('pool'), 0, length - uris.length - 1, 'WITHSCORES', gotPool
+        @redis.zrevrange @key('pool'), 0, -1, 'WITHSCORES', gotPool
       else
         gotPool null, []
 
@@ -231,7 +231,7 @@ class RedisAdapter
           return a.updated - b.updated
         return b.votes - a.votes
 
-      done null, s.tracks
+      done null, s.tracks.slice 0, length
       s = null
       return
 
