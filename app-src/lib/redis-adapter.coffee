@@ -7,6 +7,11 @@ class RedisAdapter
     @redis  = redis
     @prefix = prefix
 
+  @SORT_FN: (a, b) ->
+    if a.votes == b.votes
+      return a.updated - b.updated
+    return b.votes - a.votes
+
   key: ->
     args = []
     args.push arguments...
@@ -204,11 +209,30 @@ class RedisAdapter
       return done err if err
 
       s.votes = {}
+      toFetch = []
 
       for uri, index in poolUris by 2
         s.votes[uri] = poolUris[index + 1]
-        s.uris.push uri
+        toFetch.push uri
 
+      if 0 < toFetch.length
+        @getTracks toFetch, gotPoolTracks
+      else
+        s.poolTracks = []
+        @getTracks s.uris, gotTracks
+      return
+
+    gotPoolTracks = (err, poolTracks) =>
+      return done err if err
+
+      for track in poolTracks
+        track.votes = s.votes[track.uri]
+
+      poolTracks = poolTracks
+        .sort(RedisAdapter.SORT_FN)
+        .slice(0, length - s.uris.length)
+
+      s.poolTracks = poolTracks
       @getTracks s.uris, gotTracks
       return
 
@@ -216,6 +240,7 @@ class RedisAdapter
       return done err if err
 
       s.tracks = tracks
+      s.tracks.push s.poolTracks...
       @getVotes s.tracks, gotVotes
       return
 
@@ -226,12 +251,9 @@ class RedisAdapter
         track.votes = 0 unless 'number' == typeof track.votes
 
       # Sort by votes then date
-      s.tracks.sort (a, b) ->
-        if a.votes == b.votes
-          return a.updated - b.updated
-        return b.votes - a.votes
+      s.tracks.sort RedisAdapter.SORT_FN
 
-      done null, s.tracks.slice 0, length
+      done null, s.tracks
       s = null
       return
 

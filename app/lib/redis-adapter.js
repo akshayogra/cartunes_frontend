@@ -13,6 +13,13 @@ RedisAdapter = (function() {
     this.prefix = prefix;
   }
 
+  RedisAdapter.SORT_FN = function(a, b) {
+    if (a.votes === b.votes) {
+      return a.updated - b.updated;
+    }
+    return b.votes - a.votes;
+  };
+
   RedisAdapter.prototype.key = function() {
     var args;
     args = [];
@@ -178,7 +185,7 @@ RedisAdapter = (function() {
   };
 
   RedisAdapter.prototype.getQueue = function(length, done) {
-    var gotPool, gotTracks, gotVotes, s;
+    var gotPool, gotPoolTracks, gotTracks, gotVotes, s;
     s = {
       votes: {}
     };
@@ -197,25 +204,48 @@ RedisAdapter = (function() {
     })(this));
     gotPool = (function(_this) {
       return function(err, poolUris) {
-        var index, uri, _i, _len;
+        var index, toFetch, uri, _i, _len;
         if (err) {
           return done(err);
         }
         s.votes = {};
+        toFetch = [];
         for (index = _i = 0, _len = poolUris.length; _i < _len; index = _i += 2) {
           uri = poolUris[index];
           s.votes[uri] = poolUris[index + 1];
-          s.uris.push(uri);
+          toFetch.push(uri);
         }
+        if (0 < toFetch.length) {
+          _this.getTracks(toFetch, gotPoolTracks);
+        } else {
+          s.poolTracks = [];
+          _this.getTracks(s.uris, gotTracks);
+        }
+      };
+    })(this);
+    gotPoolTracks = (function(_this) {
+      return function(err, poolTracks) {
+        var track, _i, _len;
+        if (err) {
+          return done(err);
+        }
+        for (_i = 0, _len = poolTracks.length; _i < _len; _i++) {
+          track = poolTracks[_i];
+          track.votes = s.votes[track.uri];
+        }
+        poolTracks = poolTracks.sort(RedisAdapter.SORT_FN).slice(0, length - s.uris.length);
+        s.poolTracks = poolTracks;
         _this.getTracks(s.uris, gotTracks);
       };
     })(this);
     gotTracks = (function(_this) {
       return function(err, tracks) {
+        var _ref;
         if (err) {
           return done(err);
         }
         s.tracks = tracks;
+        (_ref = s.tracks).push.apply(_ref, s.poolTracks);
         _this.getVotes(s.tracks, gotVotes);
       };
     })(this);
@@ -232,13 +262,8 @@ RedisAdapter = (function() {
             track.votes = 0;
           }
         }
-        s.tracks.sort(function(a, b) {
-          if (a.votes === b.votes) {
-            return a.updated - b.updated;
-          }
-          return b.votes - a.votes;
-        });
-        done(null, s.tracks.slice(0, length));
+        s.tracks.sort(RedisAdapter.SORT_FN);
+        done(null, s.tracks);
         s = null;
       };
     })(this);
