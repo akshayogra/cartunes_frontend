@@ -41,7 +41,7 @@ module.exports = (app) ->
           return
 
         get      : (done) ->
-          db.getQueue app.set('queue max'), done
+          controller.getQueue done
           return
 
       current    :

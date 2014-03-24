@@ -42,7 +42,7 @@ module.exports = function(app) {
           app.emit('queue:downvote', track, addr);
         },
         get: function(done) {
-          db.getQueue(app.set('queue max'), done);
+          controller.getQueue(done);
         }
       },
       current: {

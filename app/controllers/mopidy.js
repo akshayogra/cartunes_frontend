@@ -178,6 +178,21 @@ MopidyController = (function(_super) {
     return this;
   };
 
+  MopidyController.prototype.getQueue = function(done) {
+    var gotQueue;
+    gotQueue = (function(_this) {
+      return function(err, tracks) {
+        if (err) {
+          return done(err);
+        }
+        done(null, tracks);
+        _this.queue.set(tracks);
+      };
+    })(this);
+    this.db.getQueue(this.app.set('queue max'), gotQueue);
+    return this;
+  };
+
   MopidyController.prototype.queueAdd = function(track, addr) {
     var gotVotes, votedTrack;
     votedTrack = (function(_this) {

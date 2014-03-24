@@ -104,6 +104,17 @@ class MopidyController extends Emitter
 
     this
 
+  getQueue: (done) ->
+    gotQueue = (err, tracks) =>
+      return done err if err
+      done null, tracks
+      @queue.set tracks
+      return
+
+    @db.getQueue @app.set('queue max'), gotQueue
+
+    this
+
   queueAdd: (track, addr) ->
     votedTrack = (err) =>
       return if err
