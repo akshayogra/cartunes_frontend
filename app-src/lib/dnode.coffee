@@ -45,12 +45,12 @@ module.exports = (app) ->
           return
 
       current    :
-        vote     : ->
-          app.emit 'current:vote', addr
+        vote     : (clientId) ->
+          app.emit 'current:vote', clientId || addr
           return
 
-        downvote : ->
-          app.emit 'current:downvote', addr
+        downvote : (clientId) ->
+          app.emit 'current:downvote', clientId || addr
           return
 
         get      : (done) ->
