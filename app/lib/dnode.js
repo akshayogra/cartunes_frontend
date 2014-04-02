@@ -46,11 +46,11 @@ module.exports = function(app) {
         }
       },
       current: {
-        vote: function() {
-          app.emit('current:vote', addr);
+        vote: function(clientId) {
+          app.emit('current:vote', clientId || addr);
         },
-        downvote: function() {
-          app.emit('current:downvote', addr);
+        downvote: function(clientId) {
+          app.emit('current:downvote', clientId || addr);
         },
         get: function(done) {
           controller.getPlaying(done);
