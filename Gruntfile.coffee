@@ -21,7 +21,8 @@ module.exports = (grunt) ->
         options     :
           transform : ['coffeeify', 'jadeify']
           alias     : ['./app-src/views/js/lib/page.coffee:page']
-          debug     : true
+          bundleOptions:
+            debug   : true
     uglify          :
       default       :
         src         : 'app/public/js/dist.js'
