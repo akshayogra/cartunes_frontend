@@ -877,9 +877,9 @@ input.search-input {
 }
 .track-artist {
   font-size: 0.8125em;
-  line-height: 1.3846153846153846em;
+  line-height: 1.384615384615385em;
   color: #999;
-  height: 1.8461538461538463em;
+  height: 1.846153846153846em;
   padding: 0em 4.153846153846154em;
 }
 .panel-queue .track-name {
@@ -984,11 +984,11 @@ input.search-input {
     width: 3.75em;
   }
   .track-name {
-    margin: 0.5249999999999999em 0em 0em;
+    margin: 0.525em 0em 0em;
     padding: 0em 4.5em;
   }
   .track-info .track-name {
-    margin: 0.22499999999999998em 0em 0em;
+    margin: 0.225em 0em 0em;
   }
   .track-artist {
     padding: 0em 5.538461538461538em;
@@ -1034,6 +1034,6 @@ input.search-input {
     cursor: pointer;
   }
   .panel-labels .icon {
-    margin: 0em 0.30000000000000004em 0em;
+    margin: 0em 0.3em 0em;
   }
 }
