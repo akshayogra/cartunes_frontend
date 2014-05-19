@@ -21,7 +21,7 @@
     "grunt-contrib-connect": "^0.7.x",
     "grunt": "0.4.x",
     "grunt-contrib-watch": "0.6.x",
-    "browserify": "3.x",
+    "browserify": "4.x",
     "grunt-browserify": "2.x"
   }
 }

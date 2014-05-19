@@ -23,7 +23,7 @@
     "redis": "0.10.x",
     "shoe": "0.0.x",
     "dnode": "1.2.x",
-    "async": "0.8.x",
+    "async": "0.9.x",
     "uuid": "1.4.x",
     "backbone": "1.1.x",
     "connect": "2.x"
@@ -33,13 +33,13 @@
     "grunt-contrib-watch": "0.6.x",
     "grunt-nodemon": "0.2.x",
     "grunt-concurrent": "0.5.x",
-    "browserify": "3.x",
+    "browserify": "4.x",
     "grunt-browserify": "2.x",
     "coffeeify": "0.6.x",
     "grunt-contrib-uglify": "0.4.x",
     "nib": "1.x",
-    "grunt-contrib-stylus": "0.15.x",
-    "jadeify": "2.1.x",
+    "grunt-contrib-stylus": "0.16.x",
+    "jadeify": "2.2.x",
     "grunt-contrib-jade": "0.11.x"
   }
 }
