@@ -14,7 +14,7 @@
     "shoe": "0.0.x",
     "reconnect-core": "0.0.1",
     "dnode": "1.x",
-    "lastfm": "git://github.com/meantimeit/browserified-lastfm-api.git"
+    "browserified-lastfm-api": "git://github.com/meantimeit/browserified-lastfm-api.git"
   },
   "devDependencies": {
     "mocha": "1.x",
