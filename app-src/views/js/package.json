@@ -6,21 +6,21 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Akshay Ogra <akki@techline.nz>",
+  "author": "Akshay Ogra <tim@thechurch.co.nz>",
   "license": "MIT",
   "dependencies": {
     "underscore": "1.x",
-    "jquery": "3.x",
+    "jquery": "2.x",
     "shoe": "0.0.x",
-    "reconnect-core": "1.3.0",
+    "reconnect-core": "0.0.1",
     "dnode": "1.x",
     "lastfm": "git://github.com/meantimeit/browserified-lastfm-api.git"
   },
   "devDependencies": {
-    "mocha": "3.x",
-    "grunt-contrib-connect": "^1.0.x",
-    "grunt": "1.0.x",
-    "grunt-contrib-watch": "1.0.x",
+    "mocha": "1.x",
+    "grunt-contrib-connect": "^0.7.x",
+    "grunt": "0.4.x",
+    "grunt-contrib-watch": "0.6.x",
     "browserify": "4.x",
     "grunt-browserify": "2.x"
   }
