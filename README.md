@@ -1,7 +1,6 @@
-# dplyr
+# cartunes_frontend
 
-Musical democracy for Design Works. A frontend for the mopidy HTTP server.
-
+Musical democracy for the car!
 
 ## Installation
 
@@ -19,7 +18,6 @@ Requires knowledge of the Mac OSX / *nix command line
 
         $ npm install
         $ node server.js
-
 
 ## Development
 
