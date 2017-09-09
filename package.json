@@ -1,18 +1,21 @@
 {
-  "name": "cartunes",
-  "version": "0.0.1",
-  "description": "Musical Jukebox for the car",
+  "name": "dplyr",
+  "version": "0.1.0",
+  "description": "A jukebox for mopidy",
   "repository": {
     "type": "git",
-    "url": "git://github.com/akshayogra/cartunes_frontend.git"
+    "url": "git://github.com/thechurch/dwp.git"
   },
   "keywords": [
     "mopidy",
     "jukebox"
   ],
-  "author": "Akki Ogra <akki@techline.nz>",
+  "author": "Tim Smart <tim@thechurch.co.nz>",
   "license": "MIT",
-  "homepage": "https://github.com/akshayogra/cartunes_frontend.git",
+  "bugs": {
+    "url": "https://github.com/thechurch/dwp/issues"
+  },
+  "homepage": "https://github.com/thechurch/dwp",
   "dependencies": {
     "mopidy": "0.2.x",
     "express": "4.x",
@@ -23,8 +26,7 @@
     "async": "0.9.x",
     "uuid": "1.4.x",
     "backbone": "1.1.x",
-    "connect": "2.x",
-    "morgan": "^1.8.2"
+    "connect": "2.x"
   },
   "devDependencies": {
     "grunt": "0.4.x",

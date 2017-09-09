@@ -1,12 +1,12 @@
 {
-  "name": "cartunes-client",
+  "name": "dplyr-client",
   "private": true,
-  "version": "0.0.1",
-  "description": "cartunes client javascript",
+  "version": "0.1.0",
+  "description": "CarTunes client javascript",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Akshay Ogra <tim@thechurch.co.nz>",
+  "author": "Tim Smart <tim@thechurch.co.nz>",
   "license": "MIT",
   "dependencies": {
     "underscore": "1.x",
@@ -14,7 +14,7 @@
     "shoe": "0.0.x",
     "reconnect-core": "0.0.1",
     "dnode": "1.x",
-    "browserified-lastfm-api": "git://github.com/meantimeit/browserified-lastfm-api.git"
+    "browserified-lastfm-api": "git+https://github.com/meantimeit/browserified-lastfm-api.git"
   },
   "devDependencies": {
     "mocha": "1.x",
