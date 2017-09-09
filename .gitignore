@@ -59,6 +59,6 @@ Icon
 .Trashes
 
 # Ignore config
-config.json
+#config.json
 
 app/views/
